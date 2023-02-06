@@ -1,5 +1,4 @@
 * Todo list
 - Html templates
 - Description and logo
-- Sort functions by files
 - Concise urls
