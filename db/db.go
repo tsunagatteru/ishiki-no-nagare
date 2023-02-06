@@ -34,13 +34,13 @@ func AddPost(dbConn *sql.DB, message string){
 	}
 }
 
-func RetrievePage(dbConn *sql.DB, pageNumber int)([]model.Post){
+func RetrievePage(dbConn *sql.DB, pageNumber int, pageLength int)([]model.Post){
 	query := `SELECT id, message, updated, created
     FROM Posts
     ORDER BY id ASC
-    LIMIT 20 OFFSET $1;`
-	offset := pageNumber * 20
-	rows, err := dbConn.Query(query, offset)
+    LIMIT $1 OFFSET $2;`
+	offset := (pageNumber - 1) * pageLength
+	rows, err := dbConn.Query(query, pageLength, offset)
 	if  err != nil {
 		log.Println(err)
 	}

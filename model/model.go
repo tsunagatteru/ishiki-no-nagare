@@ -6,3 +6,10 @@ type Post struct{
 	Edited string `json:"edited"`
 	Created string `json:"created"`
 }
+
+type Config struct{
+	Host string `yaml:"host"`
+	Port string `yaml:"port"`
+	ApiDir string `yaml:"apidir"`
+	PageLength int `yaml:pagelength`
+}

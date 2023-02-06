@@ -1,6 +1,5 @@
 * Todo list
 - Html templates
-- Configuration
 - Description and logo
 - Sort functions by files
 - Check if table exists

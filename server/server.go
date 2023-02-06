@@ -18,16 +18,16 @@ func NewRouter()(*gin.Engine){
 	return router
 }
 
-func RunRouter(router *gin.Engine, dbConn *sql.DB){
+func RunRouter(router *gin.Engine, dbConn *sql.DB, config *model.Config){
 	router.LoadHTMLGlob("res/templates/*.tmpl")
 	router.Use(DatabaseMiddleware(dbConn))
-	router.Use(ConfigMiddleware())
-	api := router.Group("/api")
+	router.Use(ConfigMiddleware(config))
+	api := router.Group(config.ApiDir)
 	api.GET("/posts/:page", getPosts)
 	api.POST("/create-post", createPost)
 	front := router.Group("/")
 	front.GET("/posts/:page", showPosts)
-	router.Run("localhost:8080")
+	router.Run(config.Host + ":" +config.Port)
 }
 
 func DatabaseMiddleware(dbConn *sql.DB) gin.HandlerFunc {
@@ -36,10 +36,11 @@ func DatabaseMiddleware(dbConn *sql.DB) gin.HandlerFunc {
 	}
 }
 
-func ConfigMiddleware() gin.HandlerFunc {
+func ConfigMiddleware(config *model.Config) gin.HandlerFunc {
 	return func (c *gin.Context) {
-		c.Set("BaseURL", "http://localhost:8080")
-		c.Set("ApiDir", "/api")
+		c.Set("BaseURL", "http://" + config.Host + ":" + config.Port)
+		c.Set("ApiDir", config.ApiDir)
+		c.Set("PageLength", config.PageLength)
 	}
 }
 
@@ -69,8 +70,9 @@ func getPosts(c *gin.Context){
 	if err != nil{
 		log.Println(err)
 	}
+	pageLength := c.MustGet("PageLength").(int)
 	dbConn := c.MustGet("dbConn").(*sql.DB)
-	posts := db.RetrievePage(dbConn, pageNumber)
+	posts := db.RetrievePage(dbConn, pageNumber, pageLength)
 	c.JSON(http.StatusOK, posts)
 }
 
