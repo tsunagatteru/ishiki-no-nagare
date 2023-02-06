@@ -2,5 +2,4 @@
 - Html templates
 - Description and logo
 - Sort functions by files
-- Check if table exists
 - Concise urls

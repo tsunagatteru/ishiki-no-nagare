@@ -17,7 +17,7 @@ func Open()(*sql.DB){
 }
 
 func CreateTable(dbConn *sql.DB){
-	query := `CREATE TABLE Posts(
+	query := `CREATE TABLE if not exists Posts(
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     message TEXT,
     updated TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
