@@ -1,20 +1,19 @@
 package server
 
-import(
+import (
+	"database/sql"
+	"encoding/json"
+	"io/ioutil"
 	"log"
 	"net/http"
-	"database/sql"
 	"strconv"
-	"io/ioutil"
-	"encoding/json"
-	
+
 	"github.com/gin-gonic/gin"
 	"github.com/tsunagatteru/ishiki-no-nagare/db"
 	"github.com/tsunagatteru/ishiki-no-nagare/model"
 )
 
-
-func showPosts(c *gin.Context){
+func showPosts(c *gin.Context) {
 	page := "0"
 	page = (c.Param("page"))
 	res, err := http.Get(c.MustGet("BaseURL").(string) + c.MustGet("ApiDir").(string) + "/posts/" + page)
@@ -23,7 +22,7 @@ func showPosts(c *gin.Context){
 	}
 	defer res.Body.Close()
 	body, err := ioutil.ReadAll(res.Body)
-	if err != nil{
+	if err != nil {
 		log.Println(err)
 	}
 	var response []model.Post
@@ -33,10 +32,10 @@ func showPosts(c *gin.Context){
 	})
 }
 
-func getPosts(c *gin.Context){
+func getPosts(c *gin.Context) {
 	pageNumber := 0
 	pageNumber, err := strconv.Atoi(c.Param("page"))
-	if err != nil{
+	if err != nil {
 		log.Println(err)
 	}
 	pageLength := c.MustGet("PageLength").(int)
@@ -45,7 +44,7 @@ func getPosts(c *gin.Context){
 	c.JSON(http.StatusOK, posts)
 }
 
-func createPost(c *gin.Context){
+func createPost(c *gin.Context) {
 	messageByte, err := c.GetRawData()
 	if err != nil {
 		log.Println(err)
