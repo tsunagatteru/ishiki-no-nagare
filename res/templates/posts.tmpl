@@ -1,10 +1,20 @@
+<!DOCTYPE html>
 <html>
 	<h1>
 		Title
 	</h1>
 	<body>
-		{{ range .Posts }}
-		    Message: {{ .Message }}
-		{{ end }}
+		<div class="background">
+			
+		</div>
+		<main class="main">
+			<div class="container">
+				<section class="feed">
+					{{ range .Posts }}
+					  {{ template "post-block" . }}
+					{{ end }}
+				</section>
+			</div>
+		</main>
 	</body>
 </html>

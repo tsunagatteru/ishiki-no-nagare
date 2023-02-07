@@ -1,4 +1,9 @@
 * Todo list
-- Html templates
 - Description and logo
 - Concise urls
+- Css
+- Header and background in template
+- Posting frontend
+- Authorization
+- More config options
+- Error handling rework
