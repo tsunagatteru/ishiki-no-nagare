@@ -1,9 +1,11 @@
 * Todo list
 - Description and logo
-- Concise urls
 - Css
 - Header and background in template
-- Posting frontend
-- Authorization
-- More config options
+- Login and logout buttons
+- Create post form
+- Configuration options rework
 - Error handling rework
+- Proper handlers grouping
+- Rss feed
+- Post search

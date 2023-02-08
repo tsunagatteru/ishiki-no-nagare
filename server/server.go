@@ -8,6 +8,8 @@ import (
 	"log"
 	"net/http"
 
+	"github.com/gin-contrib/sessions"
+	"github.com/gin-contrib/sessions/cookie"
 	"github.com/gin-gonic/gin"
 	"github.com/tsunagatteru/ishiki-no-nagare/model"
 )
@@ -17,8 +19,8 @@ func NewRouter() *gin.Engine {
 	return router
 }
 
-func RunRouter(router *gin.Engine, dbConn *sql.DB, config *model.Config, resources embed.FS) {
-	router.SetHTMLTemplate(template.Must(template.New("").ParseFS(resources, "res/templates/*.tmpl")))
+func RunRouter(r *gin.Engine, dbConn *sql.DB, config *model.Config, resources embed.FS) {
+	r.SetHTMLTemplate(template.Must(template.New("").ParseFS(resources, "res/templates/*.tmpl")))
 	resRoot, err := fs.Sub(resources, "res")
 	if err != nil {
 		log.Fatalln(err)
@@ -27,16 +29,25 @@ func RunRouter(router *gin.Engine, dbConn *sql.DB, config *model.Config, resourc
 	if err != nil {
 		log.Fatalln(err)
 	}
-	router.StaticFS("/static", http.FS(staticRoot))
-	router.Use(DatabaseMiddleware(dbConn))
-	router.Use(ConfigMiddleware(config))
-	api := router.Group(config.ApiDir)
+	r.StaticFS("/static", http.FS(staticRoot))
+	r.Use(DatabaseMiddleware(dbConn))
+	r.Use(ConfigMiddleware(config))
+	r.Use(sessions.Sessions("mysession", cookie.NewStore([]byte(config.CookieKey))))
+
+	admin := r.Group("/admin")
+	admin.Use(AuthRequired)
+	admin.GET("/status", status)
+
+	api := r.Group(config.ApiDir)
 	api.GET("/posts/:page", getPosts)
 	api.POST("/create-post", createPost)
-	front := router.Group("/")
-	front.GET("/posts/:page", showPosts)
-	front.GET("/", indexRedirect)
-	router.Run(config.Host + ":" + config.Port)
+
+	r.GET("/posts/:page", showPosts)
+	r.GET("/", indexRedirect)
+	r.POST("/login", login)
+	r.GET("/logout", logout)
+
+	r.Run(config.Host + ":" + config.Port)
 }
 
 func DatabaseMiddleware(dbConn *sql.DB) gin.HandlerFunc {
@@ -50,6 +61,7 @@ func ConfigMiddleware(config *model.Config) gin.HandlerFunc {
 		c.Set("BaseURL", "http://"+config.Host+":"+config.Port)
 		c.Set("ApiDir", config.ApiDir)
 		c.Set("PageLength", config.PageLength)
+		c.Set("Username", config.UserName)
+		c.Set("Password", config.Password)
 	}
-
 }

@@ -12,4 +12,7 @@ type Config struct {
 	Port       string `yaml:"port"`
 	ApiDir     string `yaml:"apidir"`
 	PageLength int    `yaml:"pagelength"`
+	UserName   string `yaml:"username"`
+	Password   string `yaml:"password"`
+	CookieKey  string `yamml:"cookiekey"`
 }
