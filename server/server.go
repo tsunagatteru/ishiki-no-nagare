@@ -35,6 +35,7 @@ func RunRouter(router *gin.Engine, dbConn *sql.DB, config *model.Config, resourc
 	api.POST("/create-post", createPost)
 	front := router.Group("/")
 	front.GET("/posts/:page", showPosts)
+	front.GET("/", indexRedirect)
 	router.Run(config.Host + ":" + config.Port)
 }
 

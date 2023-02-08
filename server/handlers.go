@@ -6,12 +6,18 @@ import (
 	"io/ioutil"
 	"log"
 	"net/http"
+	"net/url"
 	"strconv"
 
 	"github.com/gin-gonic/gin"
 	"github.com/tsunagatteru/ishiki-no-nagare/db"
 	"github.com/tsunagatteru/ishiki-no-nagare/model"
 )
+
+func indexRedirect(c *gin.Context) {
+	location := url.URL{Path: "/posts/0"}
+	c.Redirect(http.StatusFound, location.RequestURI())
+}
 
 func showPosts(c *gin.Context) {
 	page := "0"
