@@ -42,6 +42,10 @@ func showSubmitPage(c *gin.Context) {
 	c.HTML(http.StatusOK, "create-post.tmpl", gin.H{})
 }
 
+func showLogin(c *gin.Context) {
+	c.HTML(http.StatusOK, "login.tmpl", gin.H{})
+}
+
 func getPosts(c *gin.Context) {
 	pageNumber := 0
 	pageNumber, err := strconv.Atoi(c.Param("page"))
@@ -55,11 +59,7 @@ func getPosts(c *gin.Context) {
 }
 
 func createPost(c *gin.Context) {
-	messageByte, err := c.GetRawData()
-	if err != nil {
-		log.Println(err)
-	}
-	message := string(messageByte)
+	message := c.PostForm("message")
 	dbConn := c.MustGet("dbConn").(*sql.DB)
 	db.AddPost(dbConn, message)
 	c.IndentedJSON(http.StatusCreated, message)

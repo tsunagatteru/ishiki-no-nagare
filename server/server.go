@@ -34,19 +34,19 @@ func RunRouter(r *gin.Engine, dbConn *sql.DB, config *model.Config, resources em
 	r.Use(ConfigMiddleware(config))
 	r.Use(sessions.Sessions("mysession", cookie.NewStore([]byte(config.CookieKey))))
 
-	admin := r.Group("/admin")
-	admin.Use(AuthRequired)
-	admin.GET("/status", status)
-
 	api := r.Group(config.ApiDir)
 	api.GET("/posts/:page", getPosts)
-	api.POST("/create-post", createPost)
+	api.GET("/status", status)
+	api.POST("/login", login)
+	api.GET("/logout", logout)
+	admin := api.Group("/admin")
+	admin.Use(AuthRequired)
+	admin.POST("/create-post", createPost)
 
 	r.GET("/posts/:page", showPosts)
 	r.GET("/", indexRedirect)
-	r.POST("/login", login)
-	r.GET("/logout", logout)
 	r.GET("/create-post", showSubmitPage)
+	r.GET("/login", showLogin)
 
 	r.Run(config.Host + ":" + config.Port)
 }

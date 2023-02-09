@@ -3,9 +3,10 @@
 - Css
 - Header and background in template
 - Login and logout buttons
-- Create post form
 - Configuration options rework
 - Error handling rework
 - Proper handlers grouping
 - Rss feed
 - Post search
+- Change postst endpoint to  /index.php?page=dapi&s=post&q=index format
+- Resolve sqlite error
