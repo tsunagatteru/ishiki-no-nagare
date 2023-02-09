@@ -38,6 +38,10 @@ func showPosts(c *gin.Context) {
 	})
 }
 
+func showSubmitPage(c *gin.Context) {
+	c.HTML(http.StatusOK, "create-post.tmpl", gin.H{})
+}
+
 func getPosts(c *gin.Context) {
 	pageNumber := 0
 	pageNumber, err := strconv.Atoi(c.Param("page"))

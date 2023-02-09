@@ -46,6 +46,7 @@ func RunRouter(r *gin.Engine, dbConn *sql.DB, config *model.Config, resources em
 	r.GET("/", indexRedirect)
 	r.POST("/login", login)
 	r.GET("/logout", logout)
+	r.GET("/create-post", showSubmitPage)
 
 	r.Run(config.Host + ":" + config.Port)
 }
