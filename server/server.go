@@ -34,7 +34,7 @@ func RunRouter(r *gin.Engine, dbConn *sql.DB, config *model.Config, resources em
 	r.Use(ConfigMiddleware(config))
 	r.Use(sessions.Sessions("mysession", cookie.NewStore([]byte(config.CookieKey))))
 
-	api := r.Group(config.ApiDir)
+	api := r.Group("/api")
 	api.GET("/posts/:page", getPosts)
 	api.GET("/status", status)
 	api.POST("/login", login)
@@ -60,7 +60,6 @@ func DatabaseMiddleware(dbConn *sql.DB) gin.HandlerFunc {
 func ConfigMiddleware(config *model.Config) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		c.Set("BaseURL", "http://"+config.Host+":"+config.Port)
-		c.Set("ApiDir", config.ApiDir)
 		c.Set("PageLength", config.PageLength)
 		c.Set("Username", config.UserName)
 		c.Set("Password", config.Password)

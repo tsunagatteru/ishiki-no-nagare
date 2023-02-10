@@ -22,7 +22,7 @@ func indexRedirect(c *gin.Context) {
 func showPosts(c *gin.Context) {
 	page := "0"
 	page = (c.Param("page"))
-	res, err := http.Get(c.MustGet("BaseURL").(string) + c.MustGet("ApiDir").(string) + "/posts/" + page)
+	res, err := http.Get(c.MustGet("BaseURL").(string) + "/api/posts/" + page)
 	if err != nil {
 		log.Println(err)
 	}
