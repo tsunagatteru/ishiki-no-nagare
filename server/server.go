@@ -2,7 +2,6 @@ package server
 
 import (
 	"database/sql"
-	"embed"
 	"html/template"
 	"io/fs"
 	"log"
@@ -19,13 +18,9 @@ func NewRouter() *gin.Engine {
 	return router
 }
 
-func RunRouter(r *gin.Engine, dbConn *sql.DB, config *model.Config, resources embed.FS) {
-	r.SetHTMLTemplate(template.Must(template.New("").ParseFS(resources, "res/templates/*.tmpl")))
-	resRoot, err := fs.Sub(resources, "res")
-	if err != nil {
-		log.Fatalln(err)
-	}
-	staticRoot, err := fs.Sub(resRoot, "static")
+func RunRouter(r *gin.Engine, dbConn *sql.DB, config *model.Config, resources fs.FS) {
+	r.SetHTMLTemplate(template.Must(template.New("").ParseFS(resources, "templates/*.tmpl")))
+	staticRoot, err := fs.Sub(resources, "static")
 	if err != nil {
 		log.Fatalln(err)
 	}

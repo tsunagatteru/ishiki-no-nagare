@@ -1,23 +1,23 @@
 package config
 
 import (
-    "log"
-    "os"
+	"log"
+	"os"
 
-	"gopkg.in/yaml.v2"
 	"github.com/tsunagatteru/ishiki-no-nagare/model"
+	"gopkg.in/yaml.v2"
 )
 
-func Read()(*model.Config){
+func Read(path string) *model.Config {
 	config := &model.Config{}
-	file, err := os.Open("config.yml")
+	file, err := os.Open(path)
 	if err != nil {
 		log.Fatalln(err)
 	}
 	defer file.Close()
-    d := yaml.NewDecoder(file)
+	d := yaml.NewDecoder(file)
 	if err := d.Decode(&config); err != nil {
-        log.Fatalln(err)
-    }
+		log.Fatalln(err)
+	}
 	return config
 }
