@@ -15,7 +15,7 @@ import (
 )
 
 func indexRedirect(c *gin.Context) {
-	location := url.URL{Path: "/posts/0"}
+	location := url.URL{Path: "/posts/1"}
 	c.Redirect(http.StatusFound, location.RequestURI())
 }
 

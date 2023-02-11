@@ -1,6 +1,10 @@
 {{define "post-block"}}
-<div class="post">
+<div class="message_bubble">
+	<div class="message_text">
 	{{ .Message }}
+	</div>
+	<div class="message_date">
 	{{ .Created }}
+	</div>
 </div>
 {{end}}

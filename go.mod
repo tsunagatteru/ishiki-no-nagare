@@ -3,9 +3,9 @@ module github.com/tsunagatteru/ishiki-no-nagare
 go 1.19
 
 require (
-	github.com/gin-contrib/sessions v0.0.5
+	github.com/gin-contrib/sessions v0.0.4
 	github.com/gin-gonic/gin v1.8.2
-	github.com/mattn/go-sqlite3 v2.0.3+incompatible
+	github.com/mattn/go-sqlite3 v1.14.16
 	gopkg.in/yaml.v2 v2.4.0
 )
 

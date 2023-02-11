@@ -8,3 +8,7 @@
 - Post search
 - Change postst endpoint to  /index.php?page=dapi&s=post&q=index format
 - Resolve sqlite error
+- File upload
+- Individual post page
+- Page switcher
+- Reverse posts order

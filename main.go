@@ -21,6 +21,7 @@ func main() {
 	flag.StringVar(&configPath, "cfg", "config.yml", "path to config")
 	flag.StringVar(&resourcesPath, "res", "embed", "path to resources folder, can use embedded one")
 	flag.Parse()
+	log.Println(resourcesPath)
 	config := config.Read(configPath)
 	var resources fs.FS
 	if resourcesPath == "embed" {

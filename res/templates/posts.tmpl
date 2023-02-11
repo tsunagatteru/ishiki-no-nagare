@@ -1,16 +1,19 @@
 <!DOCTYPE html>
-<html>
+<html class="theme">
 	<head>
 		<title>意識の流れ</title>
-		<link rel="stylesheet" href="/res/static/styles.css">
+		<link rel="stylesheet" href="/static/styles.css">
 	</head>
-	<body>
-		<div class="background">
+	<body class="posts_wrap">
+		<div class="background_wrap">
+			<canvas class="background"></canvas>
+			<div clas="background_pattern"></div>
 		</div>
+		<header class="header"></header>
 		<main class="main">
 			<div class="container">
 				<section class="feed">
-					{{ range .Posts }}
+					{{ range sort .Posts }}
 					  {{ template "post-block" . }}
 					{{ end }}
 				</section>
