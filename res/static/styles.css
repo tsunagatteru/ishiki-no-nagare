@@ -1,5 +1,7 @@
+@import url("fira/fira.css");
 .theme {
   background-color: #2d3945;
+  font-family: Fira Sans;
 }
 
 .main {
