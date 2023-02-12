@@ -13,7 +13,7 @@
 		<main class="main">
 			<div class="container">
 				<section class="feed">
-					{{ range sort .Posts }}
+					{{ range .Posts }}
 					  {{ template "post-block" . }}
 					{{ end }}
 				</section>

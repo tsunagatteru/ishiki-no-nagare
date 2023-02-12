@@ -12,3 +12,4 @@
 - Individual post page
 - Page switcher
 - Reverse posts order
+- Clean unnecesary font files
