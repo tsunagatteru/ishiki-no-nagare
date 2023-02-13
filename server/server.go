@@ -31,6 +31,7 @@ func RunRouter(r *gin.Engine, dbConn *sql.DB, config *model.Config, resources fs
 
 	api := r.Group("/api")
 	api.GET("/posts/:page", getPosts)
+	api.GET("post/:id", getPost)
 	api.POST("/login", login)
 	api.POST("/logout", logout)
 	admin := api.Group("/admin")
@@ -38,6 +39,7 @@ func RunRouter(r *gin.Engine, dbConn *sql.DB, config *model.Config, resources fs
 	admin.GET("/status", status)
 	admin.POST("/create-post", createPost)
 
+	r.GET("/post/:id", showPost)
 	r.GET("/posts/:page", showPosts)
 	r.GET("/", indexRedirect)
 	r.GET("/create-post", showSubmitPage)

@@ -18,13 +18,13 @@
 .feed{
 	margin-right: 0px;
 	padding: 15px 0;
+	max-width: 430px;
 }
 
 .message_bubble {
 	background-color: #1e1e1e;
 	border: 1px solid #364049;
 	border-radius: 10px 10px 10px 10px;
-	max-width: 430px;
 	margin-top: 2px;
 	margin-left: 50px;
 }
@@ -40,7 +40,6 @@
 
 .message_date {
 	white-space: nowrap;
-	text-align: right;
 	font-size: 12px;
 	line-height: 18px;
 	margin-top: 6px;
@@ -48,4 +47,14 @@
 	color: #7d7f81;
 	max-width: 100%;
 	position: relative;
+	text-align: right;
+}
+
+.message_id {
+	text-align: right;
+	text-decoration: none;
+}
+
+.link {
+	cursor: pointer;
 }

@@ -38,6 +38,24 @@ func showPosts(c *gin.Context) {
 	})
 }
 
+func showPost(c *gin.Context) {
+	id := (c.Param("id"))
+	res, err := http.Get(c.MustGet("BaseURL").(string) + "/api/post/" + id)
+	if err != nil {
+		log.Println(err)
+	}
+	defer res.Body.Close()
+	body, err := ioutil.ReadAll(res.Body)
+	if err != nil {
+		log.Println(err)
+	}
+	var response model.Post
+	json.Unmarshal(body, &response)
+	c.HTML(http.StatusOK, "post.tmpl", gin.H{
+		"Post": response,
+	})
+}
+
 func showSubmitPage(c *gin.Context) {
 	c.HTML(http.StatusOK, "create-post.tmpl", gin.H{})
 }
@@ -59,6 +77,16 @@ func getPosts(c *gin.Context) {
 	dbConn := c.MustGet("dbConn").(*sql.DB)
 	posts := db.RetrievePage(dbConn, pageNumber, pageLength)
 	c.JSON(http.StatusOK, posts)
+}
+
+func getPost(c *gin.Context) {
+	id, err := strconv.Atoi(c.Param("id"))
+	if err != nil {
+		log.Println(err)
+	}
+	dbConn := c.MustGet("dbConn").(*sql.DB)
+	post := db.RetrievePost(dbConn, id)
+	c.JSON(http.StatusOK, post)
 }
 
 func createPost(c *gin.Context) {
