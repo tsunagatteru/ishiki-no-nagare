@@ -1,15 +1,15 @@
 * Todo list
+- Individual post page
+- Css for all pages
 - Description and logo
-- Css
 - Header and background in template
+- File upload
 - Login and logout buttons
-- Error handling rework
 - Rss feed
 - Post search
-- Change postst endpoint to  /index.php?page=dapi&s=post&q=index format
-- Resolve sqlite error
-- File upload
-- Individual post page
 - Page switcher
-- Reverse posts order
-- Clean unnecesary font files
+- Infinite scroll with date scrolling
+- Change postst endpoint to  /index.php?page=dapi&s=post&q=index format
+- Error handling rework
+- Resolve sqlite error
+  

@@ -45,6 +45,9 @@ func showSubmitPage(c *gin.Context) {
 func showLogin(c *gin.Context) {
 	c.HTML(http.StatusOK, "login.tmpl", gin.H{})
 }
+func showLogout(c *gin.Context) {
+	c.HTML(http.StatusOK, "logout.tmpl", gin.H{})
+}
 
 func getPosts(c *gin.Context) {
 	pageNumber := 0

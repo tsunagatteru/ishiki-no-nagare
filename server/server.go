@@ -31,17 +31,18 @@ func RunRouter(r *gin.Engine, dbConn *sql.DB, config *model.Config, resources fs
 
 	api := r.Group("/api")
 	api.GET("/posts/:page", getPosts)
-	api.GET("/status", status)
 	api.POST("/login", login)
-	api.GET("/logout", logout)
+	api.POST("/logout", logout)
 	admin := api.Group("/admin")
 	admin.Use(AuthRequired)
+	admin.GET("/status", status)
 	admin.POST("/create-post", createPost)
 
 	r.GET("/posts/:page", showPosts)
 	r.GET("/", indexRedirect)
 	r.GET("/create-post", showSubmitPage)
 	r.GET("/login", showLogin)
+	r.GET("logout", showLogout)
 
 	r.Run(config.Host + ":" + config.Port)
 }
