@@ -37,7 +37,7 @@ func AddPost(dbConn *sql.DB, message string) {
 func RetrievePage(dbConn *sql.DB, pageNumber int, pageLength int) []model.Post {
 	query := `SELECT id, message, updated, created
     FROM Posts
-    ORDER BY id ASC
+    ORDER BY id DESC
     LIMIT $1 OFFSET $2;`
 	offset := (pageNumber - 1) * pageLength
 	rows, err := dbConn.Query(query, pageLength, offset)
@@ -69,5 +69,20 @@ func RetrievePost(dbConn *sql.DB, id int) model.Post {
 	if err := row.Scan(&(result.ID), &(result.Message), &(result.Edited), &(result.Created)); err != nil {
 		log.Println(err)
 	}
+	return result
+}
+
+func RetrievePageCount(dbConn *sql.DB, PageLength int) int {
+	query := `SELECT COUNT(*) FROM Posts;`
+	row, err := dbConn.Query(query)
+	if err != nil {
+		log.Println(err)
+	}
+	var postCount int
+	row.Next()
+	if err := row.Scan(&postCount); err != nil {
+		log.Println(err)
+	}
+	result := postCount % PageLength
 	return result
 }

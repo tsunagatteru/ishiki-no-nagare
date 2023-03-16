@@ -15,7 +15,12 @@ import (
 )
 
 func indexRedirect(c *gin.Context) {
-	location := url.URL{Path: "/posts/1"}
+	pageLength := c.MustGet("PageLength").(int)
+	dbConn := c.MustGet("dbConn").(*sql.DB)
+	pageNumber := db.RetrievePageCount(dbConn, pageLength)
+	page := strconv.Itoa(pageNumber)
+	path := "/posts/" + page
+	location := url.URL{Path: path}
 	c.Redirect(http.StatusFound, location.RequestURI())
 }
 
