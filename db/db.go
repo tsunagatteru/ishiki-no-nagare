@@ -71,18 +71,3 @@ func RetrievePost(dbConn *sql.DB, id int) model.Post {
 	}
 	return result
 }
-
-func RetrievePageCount(dbConn *sql.DB, PageLength int) int {
-	query := `SELECT COUNT(*) FROM Posts;`
-	row, err := dbConn.Query(query)
-	if err != nil {
-		log.Println(err)
-	}
-	var postCount int
-	row.Next()
-	if err := row.Scan(&postCount); err != nil {
-		log.Println(err)
-	}
-	result := postCount % PageLength
-	return result
-}

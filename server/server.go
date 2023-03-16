@@ -42,6 +42,7 @@ func RunRouter(r *gin.Engine, dbConn *sql.DB, config *model.Config, resources fs
 	r.GET("/post/:id", showPost)
 	r.GET("/posts/:page", showPosts)
 	r.GET("/", index)
+	r.GET("/admin", showAdminPage)
 	r.GET("/create-post", showSubmitPage)
 	r.GET("/login", showLogin)
 	r.GET("logout", showLogout)

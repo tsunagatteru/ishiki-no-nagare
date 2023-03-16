@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Admin</title>
+  <link rel="stylesheet" href="/static/styles.css">
+</head>
+<body>
+  <h1>Admin panel</h1>
+  <script>
+
+    const statusUrl = '/api/admin/status';
+    const loginUrl = '/login';
+    const logoutUrl = '/logout';
+    const createPostUrl = '/create-post';
+
+    fetch(statusUrl)
+      .then(response => response.json())
+      .then(data => {
+        if (data.status === 'authorized') {
+          const logoutPage = fetchPage(logoutUrl);
+          const createPostPage = fetchPage(createPostUrl);
+          Promise.all([logoutPage, createPostPage])
+            .then(pages => {
+              pages.forEach(page => {
+                document.body.appendChild(page);
+              });
+            });
+        } else {
+          const loginPage = fetchPage(loginUrl);
+          loginPage.then(page => {
+            document.body.appendChild(page);
+          });
+        }
+      })
+      .catch(error => console.error(error));
+	
+    function fetchPage(url) {
+		return fetch(url)
+			.then(response => response.text())
+			.then(html => {
+				const frag = document.createRange().createContextualFragment(html);
+				return frag;
+			})
+			.catch(error => console.error(error));
+    }
+  </script>
+</body>
+</html>

@@ -56,5 +56,5 @@ func AuthRequired(c *gin.Context) {
 }
 
 func status(c *gin.Context) {
-	c.JSON(http.StatusOK, gin.H{"status": "You are logged in"})
+	c.JSON(http.StatusOK, gin.H{"status": "authorized"})
 }

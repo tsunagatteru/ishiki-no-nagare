@@ -78,6 +78,10 @@ func showLogout(c *gin.Context) {
 	c.HTML(http.StatusOK, "logout.tmpl", gin.H{})
 }
 
+func showAdminPage(c *gin.Context) {
+	c.HTML(http.StatusOK, "admin.tmpl", gin.H{})
+}
+
 func getPosts(c *gin.Context) {
 	pageNumber := 0
 	pageNumber, err := strconv.Atoi(c.Param("page"))

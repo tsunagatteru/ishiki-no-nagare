@@ -1,4 +1,4 @@
 * Todo list
-- Admin page
-- Description
+- Admin page css
 - File upload
+- Documentation
