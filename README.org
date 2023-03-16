@@ -1,6 +1,4 @@
 * Todo list
-- Css for all pages
+- Admin page
 - Description
 - File upload
-- Login and logout buttons
-- Page switcher
