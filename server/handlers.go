@@ -6,7 +6,6 @@ import (
 	"io/ioutil"
 	"log"
 	"net/http"
-	"net/url"
 	"strconv"
 
 	"github.com/gin-gonic/gin"
@@ -14,18 +13,25 @@ import (
 	"github.com/tsunagatteru/ishiki-no-nagare/model"
 )
 
-func indexRedirect(c *gin.Context) {
-	pageLength := c.MustGet("PageLength").(int)
-	dbConn := c.MustGet("dbConn").(*sql.DB)
-	pageNumber := db.RetrievePageCount(dbConn, pageLength)
-	page := strconv.Itoa(pageNumber)
-	path := "/posts/" + page
-	location := url.URL{Path: path}
-	c.Redirect(http.StatusFound, location.RequestURI())
+func index(c *gin.Context) {
+	res, err := http.Get(c.MustGet("BaseURL").(string) + "/api/posts/1")
+	if err != nil {
+		log.Println(err)
+	}
+	defer res.Body.Close()
+	body, err := ioutil.ReadAll(res.Body)
+	if err != nil {
+		log.Println(err)
+	}
+	var response []model.Post
+	json.Unmarshal(body, &response)
+	c.HTML(http.StatusOK, "index.tmpl", gin.H{
+		"Posts": response,
+	})
 }
 
 func showPosts(c *gin.Context) {
-	page := "0"
+	var page string
 	page = (c.Param("page"))
 	res, err := http.Get(c.MustGet("BaseURL").(string) + "/api/posts/" + page)
 	if err != nil {

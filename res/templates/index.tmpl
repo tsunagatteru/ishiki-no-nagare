@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html class="theme">
+  <head>
+	<title>意識の流れ</title>
+	<link rel="stylesheet" href="/static/styles.css">
+	<script src="/static/jquery-3.6.4.min.js"></script>
+  </head>
+  <body class="posts_wrap">
+	<div class="background_wrap"></div>
+	<header class="header"></header>
+	<main class="main">
+	  <div class="container">
+		<section class="feed">
+		  {{ range .Posts }}
+		  {{ template "post-block" . }}
+		  {{ end }}
+		</section>
+	  </div>
+	</main>
+	<script>
+	  var currentPage = 1;
+	  var postPath = '/posts/';
+	  
+	  $(window).scroll(function() {
+		  if ($(window).scrollTop() + $(window).height() >= $(document).height()) {
+			  currentPage++;
+			  var url = postPath + currentPage;
+			  $.get(url, function(data) {
+				  $('.feed').append(data);
+			  });
+		  }
+	  });
+	</script>
+  </body>
+</html>
