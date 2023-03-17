@@ -2,47 +2,120 @@
 <html>
 <head>
   <title>Admin</title>
-  <link rel="stylesheet" href="/static/styles.css">
 </head>
 <body>
-  <h1>Admin panel</h1>
-  <script>
+  <form id="login-form" style="display: none;">
+  <div>
+    <label for="username">Username</label>
+    <input name="username" id="username-input" />
+    <label for="password">Password</label>
+    <input name="password" id="password-input" type="password" />
+  </div>
+  <div>
+    <button type="submit" onclick="return submitLogin()">Login</button>
+  </div>
+</form>
+<form id="logout-form" style="display: none;">
+  <div>
+  </div>
+  <div>
+    <button type="submit" onclick="return submitLogout()">Logout</button>
+  </div>
+</form>
+<form id="post-form" style="display: none;">
+  <div>
+    <label for="message">What do you want to say?</label>
+    <input name="message" id="message-input" />
+  </div>
+  <div>
+    <button type="submit" onclick="return submitPost()">Submit Post</button>
+  </div>
+</form>
 
-    const statusUrl = '/api/admin/status';
-    const loginUrl = '/login';
-    const logoutUrl = '/logout';
-    const createPostUrl = '/create-post';
+<script>
+function submitPost() {
+  const form = document.getElementById('post-form');
+  const messageInput = document.getElementById('message-input');
+  const message = messageInput.value;
 
-    fetch(statusUrl)
-      .then(response => response.json())
-      .then(data => {
-        if (data.status === 'authorized') {
-          const logoutPage = fetchPage(logoutUrl);
-          const createPostPage = fetchPage(createPostUrl);
-          Promise.all([logoutPage, createPostPage])
-            .then(pages => {
-              pages.forEach(page => {
-                document.body.appendChild(page);
-              });
-            });
-        } else {
-          const loginPage = fetchPage(loginUrl);
-          loginPage.then(page => {
-            document.body.appendChild(page);
-          });
-        }
-      })
-      .catch(error => console.error(error));
-	
-    function fetchPage(url) {
-		return fetch(url)
-			.then(response => response.text())
-			.then(html => {
-				const frag = document.createRange().createContextualFragment(html);
-				return frag;
-			})
-			.catch(error => console.error(error));
+  const xhr = new XMLHttpRequest();
+  xhr.onreadystatechange = function() {
+    if (xhr.readyState === XMLHttpRequest.DONE) {
+      if (xhr.status === 201) {
+        alert(xhr.responseText);
+      } else {
+        alert('Error: ' + xhr.status);
+      }
     }
-  </script>
+  };
+  xhr.open('POST', '/api/admin/create-post');
+  xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+  xhr.send('message=' + encodeURIComponent(message));
+
+  return false; // prevent default form submission behavior
+}
+</script>
+
+<script>
+function submitLogout() {
+  const xhr = new XMLHttpRequest();
+  xhr.onreadystatechange = function() {
+    if (xhr.readyState === XMLHttpRequest.DONE) {
+      if (xhr.status === 200) {
+        location.reload();
+      } else {
+        alert('Error: ' + xhr.status);
+      }
+    }
+  };
+  xhr.open('POST', '/api/logout');
+  xhr.send();
+
+  return false; // prevent default form submission behavior
+}
+</script>
+
+<script>
+function submitLogin() {
+  const form = document.getElementById('login-form');
+  const usernameInput = document.getElementById('username-input');
+  const passwordInput = document.getElementById('password-input');
+  const username = usernameInput.value;
+  const password = passwordInput.value;
+
+  const xhr = new XMLHttpRequest();
+  xhr.onreadystatechange = function() {
+    if (xhr.readyState === XMLHttpRequest.DONE) {
+      if (xhr.status === 200) {
+        location.reload();
+      } else {
+        alert('Error: ' + xhr.status);
+      }
+    }
+  };
+  xhr.open('POST', '/api/login');
+  xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+  xhr.send('username=' + encodeURIComponent(username) + '&password=' + encodeURIComponent(password));
+
+  return false; // prevent default form submission behavior
+}
+</script>
+<script>
+// Make request to /api/admin/status
+fetch('/api/admin/status')
+  .then(response => {
+    if (response.status === 200) {
+      // If response code is 200, make logout-form and post-form visible
+      document.getElementById('logout-form').style.display = 'block';
+      document.getElementById('post-form').style.display = 'block';
+    } else if (response.status === 401) {
+      // If response code is 401, make login-form visible
+      document.getElementById('login-form').style.display = 'block';
+    }
+  })
+  .catch(error => {
+    console.error('Error fetching admin status:', error);
+  });
+</script>
 </body>
 </html>

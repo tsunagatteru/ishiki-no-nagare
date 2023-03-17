@@ -108,5 +108,5 @@ func createPost(c *gin.Context) {
 	message := c.PostForm("message")
 	dbConn := c.MustGet("dbConn").(*sql.DB)
 	db.AddPost(dbConn, message)
-	c.IndentedJSON(http.StatusCreated, message)
+	c.IndentedJSON(http.StatusCreated, "created")
 }
