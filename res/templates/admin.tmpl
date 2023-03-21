@@ -42,6 +42,7 @@ function submitPost() {
     if (xhr.readyState === XMLHttpRequest.DONE) {
       if (xhr.status === 201) {
         alert(xhr.responseText);
+		messageInput.value = '';
       } else {
         alert('Error: ' + xhr.status);
       }
