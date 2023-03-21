@@ -1,4 +1,5 @@
-* Todo list
-- Admin page css
-- File upload
-- Documentation
+#+STARTUP: overview
+#+TITLE: ishiki-no-nagare
+#+LANGUAGE: en
+#+OPTIONS: num:nil
+

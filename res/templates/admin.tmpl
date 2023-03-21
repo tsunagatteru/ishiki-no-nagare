@@ -31,7 +31,6 @@
     <button type="submit" onclick="return submitPost()">Submit Post</button>
   </div>
 </form>
-
 <script>
 function submitPost() {
   const form = document.getElementById('post-form');
@@ -52,10 +51,9 @@ function submitPost() {
   xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
   xhr.send('message=' + encodeURIComponent(message));
 
-  return false; // prevent default form submission behavior
+  return false;
 }
 </script>
-
 <script>
 function submitLogout() {
   const xhr = new XMLHttpRequest();
@@ -71,10 +69,9 @@ function submitLogout() {
   xhr.open('POST', '/api/logout');
   xhr.send();
 
-  return false; // prevent default form submission behavior
+  return false;
 }
 </script>
-
 <script>
 function submitLogin() {
   const form = document.getElementById('login-form');
@@ -97,19 +94,16 @@ function submitLogin() {
   xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
   xhr.send('username=' + encodeURIComponent(username) + '&password=' + encodeURIComponent(password));
 
-  return false; // prevent default form submission behavior
+  return false;
 }
 </script>
 <script>
-// Make request to /api/admin/status
 fetch('/api/admin/status')
   .then(response => {
     if (response.status === 200) {
-      // If response code is 200, make logout-form and post-form visible
       document.getElementById('logout-form').style.display = 'block';
       document.getElementById('post-form').style.display = 'block';
     } else if (response.status === 401) {
-      // If response code is 401, make login-form visible
       document.getElementById('login-form').style.display = 'block';
     }
   })
