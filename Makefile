@@ -14,7 +14,7 @@ install:
 
 uninstall:
 	@echo -e '\033[1;32mInstalling the program...\033[0m'
-	deluser inn
-	rm -rf /var/lib/inn
-	rm -rf /etc/inn
-	rm /usr/bin/inn
+	-deluser inn
+	-rmdir /var/lib/inn
+	-rmdir /etc/inn
+	-rm /usr/bin/inn
