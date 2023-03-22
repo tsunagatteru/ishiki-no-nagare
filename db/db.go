@@ -8,8 +8,8 @@ import (
 	"github.com/tsunagatteru/ishiki-no-nagare/model"
 )
 
-func Open() *sql.DB {
-	dbConn, err := sql.Open("sqlite3", "data.db")
+func Open(dataPath string) *sql.DB {
+	dbConn, err := sql.Open("sqlite3", dataPath+"data.db")
 	if err != nil {
 		log.Fatalln(err)
 	}

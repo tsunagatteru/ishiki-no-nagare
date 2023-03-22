@@ -13,5 +13,6 @@ type Config struct {
 	PageLength int    `yaml:"pagelength"`
 	UserName   string `yaml:"username"`
 	Password   string `yaml:"password"`
-	CookieKey  string `yamml:"cookiekey"`
+	CookieKey  string `yaml:"cookiekey"`
+	DataPath   string `yaml:"datapath"`
 }

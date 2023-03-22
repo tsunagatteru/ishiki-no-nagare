@@ -33,7 +33,8 @@ func main() {
 	} else {
 		resources = os.DirFS(resourcesPath)
 	}
-	dbConn := db.Open()
+	dataPath := config.DataPath
+	dbConn := db.Open(dataPath)
 	defer dbConn.Close()
 	db.CreateTable(dbConn)
 	router := server.NewRouter()
