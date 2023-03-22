@@ -71,17 +71,6 @@ func showPost(c *gin.Context) {
 	})
 }
 
-func showSubmitPage(c *gin.Context) {
-	c.HTML(http.StatusOK, "create-post.tmpl", gin.H{})
-}
-
-func showLogin(c *gin.Context) {
-	c.HTML(http.StatusOK, "login.tmpl", gin.H{})
-}
-func showLogout(c *gin.Context) {
-	c.HTML(http.StatusOK, "logout.tmpl", gin.H{})
-}
-
 func showAdminPage(c *gin.Context) {
 	c.HTML(http.StatusOK, "admin.tmpl", gin.H{})
 }
