@@ -116,12 +116,13 @@ func createPost(c *gin.Context) {
 	if err != nil {
 		log.Println(err)
 	}
+	dataPath := c.MustGet("DataPath").(string)
 	files := form.File["files"]
 	for _, file := range files {
 		fileExt := filepath.Ext(file.Filename)
 		originalFileName := strings.TrimSuffix(filepath.Base(file.Filename), filepath.Ext(file.Filename))
 		filename := strings.ReplaceAll(strings.ToLower(originalFileName), " ", "-") + "-" + fmt.Sprintf("%v", time.Now().Unix()) + fileExt
-		c.SaveUploadedFile(file, "./public/"+filename)
+		c.SaveUploadedFile(file, dataPath+"images/"+filename)
 	}
 
 	db.AddPost(dbConn, message)

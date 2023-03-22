@@ -62,5 +62,6 @@ func ConfigMiddleware(config *model.Config) gin.HandlerFunc {
 		c.Set("PageLength", config.PageLength)
 		c.Set("Username", config.UserName)
 		c.Set("Password", config.Password)
+		c.Set("DataPath", config.DataPath)
 	}
 }

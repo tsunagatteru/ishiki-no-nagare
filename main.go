@@ -34,6 +34,8 @@ func main() {
 		resources = os.DirFS(resourcesPath)
 	}
 	dataPath := config.DataPath
+	os.Mkdir(dataPath, 0755)
+	os.Mkdir(dataPath+"images/", 0755)
 	dbConn := db.Open(dataPath)
 	defer dbConn.Close()
 	db.CreateTable(dbConn)

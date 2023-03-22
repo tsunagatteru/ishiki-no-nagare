@@ -20,6 +20,7 @@ func CreateTable(dbConn *sql.DB) {
 	query := `CREATE TABLE if not exists Posts(
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     message TEXT,
+    filenames TEXT,
     updated TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
     created TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP);`
 	if _, err := dbConn.Exec(query); err != nil {
