@@ -4,4 +4,4 @@ pagelength: 20
 username: admin
 password: password
 cookiekey: secret
-datapath: ./data/
+datapath: /var/lib/inn

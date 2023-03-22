@@ -1,35 +1,26 @@
 package main
 
 import (
-	"embed"
 	"flag"
 	"io/fs"
-	"log"
 	"os"
 
 	"github.com/tsunagatteru/ishiki-no-nagare/config"
 	"github.com/tsunagatteru/ishiki-no-nagare/db"
+	"github.com/tsunagatteru/ishiki-no-nagare/res"
 	"github.com/tsunagatteru/ishiki-no-nagare/server"
 )
-
-//go:embed res
-var embedFS embed.FS
 
 func main() {
 	var configPath string
 	var resourcesPath string
-	flag.StringVar(&configPath, "cfg", "config.yml", "path to config")
+	flag.StringVar(&configPath, "cfg", "/etc/inn/config.yml", "path to config")
 	flag.StringVar(&resourcesPath, "res", "embed", "path to resources folder, can use embedded one")
 	flag.Parse()
-	log.Println(resourcesPath)
 	config := config.Read(configPath)
 	var resources fs.FS
 	if resourcesPath == "embed" {
-		resRoot, err := fs.Sub(embedFS, "res")
-		if err != nil {
-			log.Fatalln(err)
-		}
-		resources = resRoot
+		resources = res.GetEmbedFS()
 	} else {
 		resources = os.DirFS(resourcesPath)
 	}
