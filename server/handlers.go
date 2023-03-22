@@ -3,10 +3,14 @@ package server
 import (
 	"database/sql"
 	"encoding/json"
+	"fmt"
 	"io/ioutil"
 	"log"
 	"net/http"
+	"path/filepath"
 	"strconv"
+	"strings"
+	"time"
 
 	"github.com/gin-gonic/gin"
 	"github.com/tsunagatteru/ishiki-no-nagare/db"
@@ -107,6 +111,19 @@ func getPost(c *gin.Context) {
 func createPost(c *gin.Context) {
 	message := c.PostForm("message")
 	dbConn := c.MustGet("dbConn").(*sql.DB)
+
+	form, err := c.MultipartForm()
+	if err != nil {
+		log.Println(err)
+	}
+	files := form.File["files"]
+	for _, file := range files {
+		fileExt := filepath.Ext(file.Filename)
+		originalFileName := strings.TrimSuffix(filepath.Base(file.Filename), filepath.Ext(file.Filename))
+		filename := strings.ReplaceAll(strings.ToLower(originalFileName), " ", "-") + "-" + fmt.Sprintf("%v", time.Now().Unix()) + fileExt
+		c.SaveUploadedFile(file, "./public/"+filename)
+	}
+
 	db.AddPost(dbConn, message)
 	c.IndentedJSON(http.StatusCreated, "created")
 }
