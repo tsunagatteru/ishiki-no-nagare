@@ -17,7 +17,7 @@ func main() {
 	var dataPath string
 	flag.StringVar(&configPath, "cfg", "/etc/inn/config.yml", "path to config")
 	flag.StringVar(&resourcesPath, "res", "embed", "path to resources folder, can use embedded one")
-	flag.StringVar(&resourcesPath, "data", "", "path to data, overwrites config")
+	flag.StringVar(&dataPath, "data", "", "path to data, overwrites config")
 	flag.Parse()
 	config := config.Read(configPath)
 	var resources fs.FS
