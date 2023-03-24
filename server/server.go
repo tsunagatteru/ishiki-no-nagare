@@ -6,6 +6,7 @@ import (
 	"io/fs"
 	"log"
 	"net/http"
+	"os"
 
 	"github.com/gin-contrib/sessions"
 	"github.com/gin-contrib/sessions/cookie"
@@ -13,22 +14,22 @@ import (
 	"github.com/tsunagatteru/ishiki-no-nagare/model"
 )
 
-func NewRouter() *gin.Engine {
-	router := gin.New()
-	return router
-}
-
-func RunRouter(r *gin.Engine, dbConn *sql.DB, config *model.Config, resources fs.FS) {
+func RunRouter(dbConn *sql.DB, config *model.Config, resources fs.FS) {
+	r := gin.New()
 	r.SetHTMLTemplate(template.Must(template.New("").ParseFS(resources, "templates/*.tmpl")))
 	staticRoot, err := fs.Sub(resources, "static")
 	if err != nil {
 		log.Fatalln(err)
 	}
 	r.StaticFS("/static", http.FS(staticRoot))
+	imagesRoot, err := fs.Sub(os.DirFS(config.DataPath), "images")
+	if err != nil {
+		log.Fatalln(err)
+	}
+	r.StaticFS("/images", http.FS(imagesRoot))
 	r.Use(DatabaseMiddleware(dbConn))
 	r.Use(ConfigMiddleware(config))
 	r.Use(sessions.Sessions("mysession", cookie.NewStore([]byte(config.CookieKey))))
-
 	api := r.Group("/api")
 	api.GET("/posts/:page", getPosts)
 	api.GET("post/:id", getPost)
@@ -38,12 +39,10 @@ func RunRouter(r *gin.Engine, dbConn *sql.DB, config *model.Config, resources fs
 	admin.Use(AuthRequired)
 	admin.GET("/status", status)
 	admin.POST("/create-post", createPost)
-
 	r.GET("/post/:id", showPost)
 	r.GET("/posts/:page", showPosts)
 	r.GET("/", index)
 	r.GET("/admin", showAdminPage)
-
 	r.Run(config.Host + ":" + config.Port)
 }
 
