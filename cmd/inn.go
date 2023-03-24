@@ -14,8 +14,10 @@ import (
 func main() {
 	var configPath string
 	var resourcesPath string
+	var dataPath string
 	flag.StringVar(&configPath, "cfg", "/etc/inn/config.yml", "path to config")
 	flag.StringVar(&resourcesPath, "res", "embed", "path to resources folder, can use embedded one")
+	flag.StringVar(&resourcesPath, "data", "", "path to data, overwrites config")
 	flag.Parse()
 	config := config.Read(configPath)
 	var resources fs.FS
@@ -24,7 +26,11 @@ func main() {
 	} else {
 		resources = os.DirFS(resourcesPath)
 	}
-	dataPath := config.DataPath
+	if dataPath == "" {
+		dataPath = config.DataPath
+	} else {
+		config.DataPath = dataPath
+	}
 	os.Mkdir(dataPath, 0755)
 	os.Mkdir(dataPath+"images/", 0755)
 	dbConn := db.Open(dataPath)
