@@ -10,9 +10,7 @@
 	<main class="main">
 	  <div class="container">
 		<section class="feed">
-		  {{ range .Post }}
-		  {{ template "post-block" . }}
-		  {{ end }}
+		  {{ .Post | template "post-block" . }}
 		</section>
 	  </div>
 	</main>
