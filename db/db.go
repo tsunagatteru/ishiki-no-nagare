@@ -48,7 +48,7 @@ func RetrievePage(dbConn *sql.DB, pageNumber int, pageLength int) []model.Post {
 	result := []model.Post{}
 	for rows.Next() {
 		row := model.Post{}
-		if err := rows.Scan(&(row.ID), &(row.Message), &(row.Edited), &(row.Created)); err != nil {
+		if err := rows.Scan(&(row.ID), &(row.Message), &(row.FileName), &(row.Edited), &(row.Created)); err != nil {
 			log.Println(err)
 		} else {
 			result = append(result, row)
@@ -67,7 +67,7 @@ func RetrievePost(dbConn *sql.DB, id int) model.Post {
 	}
 	result := model.Post{}
 	row.Next()
-	if err := row.Scan(&(result.ID), &(result.Message), &(result.Edited), &(result.Created)); err != nil {
+	if err := row.Scan(&(result.ID), &(result.Message), &(result.FileName), &(result.Edited), &(result.Created)); err != nil {
 		log.Println(err)
 	}
 	return result
