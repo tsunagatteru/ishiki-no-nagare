@@ -61,6 +61,11 @@
   color: #6a5acd;
 }
 
+.image {
+	max-width: 100%;
+	height: auto;
+}
+
 .message_date {
   align-self: flex-end;
   margin-top: 5px;
