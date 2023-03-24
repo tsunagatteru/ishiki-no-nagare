@@ -36,7 +36,7 @@ func AddPost(dbConn *sql.DB, message string, filename string) {
 }
 
 func RetrievePage(dbConn *sql.DB, pageNumber int, pageLength int) []model.Post {
-	query := `SELECT id, message, updated, created
+	query := `SELECT id, message, filename, updated, created
     FROM Posts
     ORDER BY id DESC
     LIMIT $1 OFFSET $2;`
@@ -58,7 +58,7 @@ func RetrievePage(dbConn *sql.DB, pageNumber int, pageLength int) []model.Post {
 }
 
 func RetrievePost(dbConn *sql.DB, id int) model.Post {
-	query := `SELECT id, message, updated, created
+	query := `SELECT id, message, filename, updated, created
     FROM Posts
     WHERE id=$1`
 	row, err := dbConn.Query(query, id)
