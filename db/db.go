@@ -20,7 +20,7 @@ func CreateTable(dbConn *sql.DB) {
 	query := `CREATE TABLE if not exists Posts(
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     message TEXT,
-    filenames TEXT,
+    filename TEXT,
     updated TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
     created TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP);`
 	if _, err := dbConn.Exec(query); err != nil {
@@ -28,9 +28,9 @@ func CreateTable(dbConn *sql.DB) {
 	}
 }
 
-func AddPost(dbConn *sql.DB, message string) {
-	query := `INSERT INTO Posts (message) VALUES ($1);`
-	if _, err := dbConn.Exec(query, message); err != nil {
+func AddPost(dbConn *sql.DB, message string, filename string) {
+	query := `INSERT INTO Posts (message, filename) VALUES ($1, $2);`
+	if _, err := dbConn.Exec(query, message, filename); err != nil {
 		log.Println(err)
 	}
 }
