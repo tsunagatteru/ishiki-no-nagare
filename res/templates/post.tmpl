@@ -4,15 +4,15 @@
 	<title>Post</title>
 	<link rel="stylesheet" href="/static/styles.css">
   </head>
-  <body class="single_post">
+  <body class="posts_wrap">
 	<div class="background_wrap"></div>
-	<div class="message_bubble">
-	  <div class="message_text">
-		{{ .Post.Message }}
+	<header class="header"></header>
+	<main class="main">
+	  <div class="container">
+		<section class="feed">
+		  {{ template "post-block" .Post }}
+		</section>
 	  </div>
-	  <div class="message_date">
-		{{ .Post.Created }}
-	  </div>
-	</div>
+	</main>
   </body>
 </html>

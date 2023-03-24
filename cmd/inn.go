@@ -30,6 +30,5 @@ func main() {
 	dbConn := db.Open(dataPath)
 	defer dbConn.Close()
 	db.CreateTable(dbConn)
-	router := server.NewRouter()
-	server.RunRouter(router, dbConn, config, resources)
+	server.RunRouter(dbConn, config, resources)
 }

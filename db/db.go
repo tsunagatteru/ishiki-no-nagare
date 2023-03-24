@@ -20,7 +20,7 @@ func CreateTable(dbConn *sql.DB) {
 	query := `CREATE TABLE if not exists Posts(
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     message TEXT,
-    filenames TEXT,
+    filename TEXT,
     updated TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
     created TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP);`
 	if _, err := dbConn.Exec(query); err != nil {
@@ -28,15 +28,15 @@ func CreateTable(dbConn *sql.DB) {
 	}
 }
 
-func AddPost(dbConn *sql.DB, message string) {
-	query := `INSERT INTO Posts (message) VALUES ($1);`
-	if _, err := dbConn.Exec(query, message); err != nil {
+func AddPost(dbConn *sql.DB, message string, filename string) {
+	query := `INSERT INTO Posts (message, filename) VALUES ($1, $2);`
+	if _, err := dbConn.Exec(query, message, filename); err != nil {
 		log.Println(err)
 	}
 }
 
 func RetrievePage(dbConn *sql.DB, pageNumber int, pageLength int) []model.Post {
-	query := `SELECT id, message, updated, created
+	query := `SELECT id, message, filename, updated, created
     FROM Posts
     ORDER BY id DESC
     LIMIT $1 OFFSET $2;`
@@ -48,7 +48,7 @@ func RetrievePage(dbConn *sql.DB, pageNumber int, pageLength int) []model.Post {
 	result := []model.Post{}
 	for rows.Next() {
 		row := model.Post{}
-		if err := rows.Scan(&(row.ID), &(row.Message), &(row.Edited), &(row.Created)); err != nil {
+		if err := rows.Scan(&(row.ID), &(row.Message), &(row.FileName), &(row.Edited), &(row.Created)); err != nil {
 			log.Println(err)
 		} else {
 			result = append(result, row)
@@ -58,7 +58,7 @@ func RetrievePage(dbConn *sql.DB, pageNumber int, pageLength int) []model.Post {
 }
 
 func RetrievePost(dbConn *sql.DB, id int) model.Post {
-	query := `SELECT id, message, updated, created
+	query := `SELECT id, message, filename, updated, created
     FROM Posts
     WHERE id=$1`
 	row, err := dbConn.Query(query, id)
@@ -67,7 +67,7 @@ func RetrievePost(dbConn *sql.DB, id int) model.Post {
 	}
 	result := model.Post{}
 	row.Next()
-	if err := row.Scan(&(result.ID), &(result.Message), &(result.Edited), &(result.Created)); err != nil {
+	if err := row.Scan(&(result.ID), &(result.Message), &(result.FileName), &(result.Edited), &(result.Created)); err != nil {
 		log.Println(err)
 	}
 	return result

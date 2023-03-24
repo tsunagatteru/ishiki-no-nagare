@@ -28,8 +28,15 @@
 }
 
 .container {
-  max-width: 720px;
+  max-width: 45%;
   margin: 0 auto;
+}
+
+.single_post {
+	max-width: 45%;
+	margin: auto;
+	position: absolute;
+	top: 45%; left: 0; bottom: 0; right: 0;
 }
 
 .feed {
@@ -61,6 +68,12 @@
   color: #6a5acd;
 }
 
+.image {
+	max-width: 100%;
+	height: auto;
+	margin-top: 10px;
+}
+
 .message_date {
   align-self: flex-end;
   margin-top: 5px;
@@ -71,13 +84,6 @@
 
 .link {
   text-decoration: none;
-}
-
-.single_post {
-	max-width: 720px;
-	margin: auto;
-	position: absolute;
-	top: 42%; left: 0; bottom: 0; right: 0;
 }
 
 #login-form, #logout-form, #post-form {
