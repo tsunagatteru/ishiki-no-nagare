@@ -115,3 +115,6 @@ func createPost(c *gin.Context) {
 	db.AddPost(dbConn, message, filename)
 	c.IndentedJSON(http.StatusCreated, "created")
 }
+
+func changeConfig(c *gin.Context) {
+}

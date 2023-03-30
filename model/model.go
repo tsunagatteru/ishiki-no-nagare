@@ -16,4 +16,5 @@ type Config struct {
 	Password   string `yaml:"password"`
 	CookieKey  string `yaml:"cookiekey"`
 	DataPath   string `yaml:"datapath"`
+	ConfigPath string
 }

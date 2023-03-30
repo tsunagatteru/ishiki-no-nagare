@@ -20,6 +20,7 @@ func main() {
 	flag.StringVar(&dataPath, "data", "", "path to data, overwrites config")
 	flag.Parse()
 	config := config.Read(configPath)
+	config.ConfigPath = configPath
 	var resources fs.FS
 	if resourcesPath == "embed" {
 		resources = res.GetEmbedFS()

@@ -39,6 +39,7 @@ func RunRouter(dbConn *sql.DB, config *model.Config, resources fs.FS) {
 	admin.Use(AuthRequired)
 	admin.GET("/status", status)
 	admin.POST("/create-post", createPost)
+	admin.POST("/config", changeConfig)
 	r.GET("/post/:id", showPost)
 	r.GET("/posts/:page", showPosts)
 	r.GET("/", index)
@@ -59,5 +60,6 @@ func ConfigMiddleware(config *model.Config) gin.HandlerFunc {
 		c.Set("Username", config.UserName)
 		c.Set("Password", config.Password)
 		c.Set("DataPath", config.DataPath)
+		c.Set("ConfigPath", config.ConfigPath)
 	}
 }
