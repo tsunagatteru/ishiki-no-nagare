@@ -1,0 +1,16 @@
+[Unit]
+Description=ishiki no nagare
+
+[Service]
+Type=simple
+User=inn
+Environment="GIN_MODE=release"
+ExecStart=/usr/bin/inn
+ExecReload=/bin/kill -HUP $MAINPID
+Restart=always
+RestartSec=3
+SyslogIdentifier=inn
+
+[Install]
+
+WantedBy=multi-user.target

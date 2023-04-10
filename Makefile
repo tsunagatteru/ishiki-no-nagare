@@ -9,8 +9,10 @@ install:
 	chown -R "inn:inn" "/var/lib/inn"
 	install -d "/etc/inn"
 	chown -R "inn:inn" "/etc/inn"
+	install d "/etc/systemd/system"
 	install -Dm 755 ./build/inn -t "/usr/bin"
-	install -Dm 644 ./config.yml.default -t "/etc/inn"
+	install -Dm 644 ./examples/config.yml -t "/etc/inn"
+	install -Dm 644 ./examples/inn.service -t "/etc/systemd/system"
 
 uninstall:
 	@echo -e '\033[1;32mInstalling the program...\033[0m'
@@ -18,3 +20,4 @@ uninstall:
 	-rmdir /var/lib/inn
 	-rmdir /etc/inn
 	-rm /usr/bin/inn
+	-rm /etc/systemd/systemd/inn.service
