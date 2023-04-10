@@ -9,7 +9,7 @@ install:
 	chown -R "inn:inn" "/var/lib/inn"
 	install -d "/etc/inn"
 	chown -R "inn:inn" "/etc/inn"
-	install d "/etc/systemd/system"
+	install -d "/etc/systemd/system"
 	install -Dm 755 ./build/inn -t "/usr/bin"
 	install -Dm 644 ./examples/config.yml -t "/etc/inn"
 	install -Dm 644 ./examples/inn.service -t "/etc/systemd/system"
