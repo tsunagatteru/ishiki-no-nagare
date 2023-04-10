@@ -3,3 +3,19 @@
 #+LANGUAGE: en
 #+OPTIONS: num:nil
 
+* Installation
+** Non-docker
+Requierements:
+- git
+- make
+- go >= 1.19
+#+begin_src bash
+  git clone https://github.com/tsunagatteru/ishiki-no-nagare.git
+  cd ishiki-no-nagare
+  make build
+  sudo make install
+#+end_src
+Edit =/etc/inn/config.yml= to your liking
+#+begin_src bash
+  sudo systemctl enable --now inn.service
+#+end_src>
