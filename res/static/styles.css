@@ -87,7 +87,7 @@
   text-decoration: none;
 }
 
-#login-form, #logout-form, #post-form {
+#login-form, #logout-form, #post-form, #config-form{
 display: none;
 flex-direction: column;
 align-items: center;
@@ -96,7 +96,8 @@ margin-top: 20px;
 
 #login-form label,
 #logout-form label,
-#post-form label {
+#post-form label,
+#config-form label{
 font-size: 16px;
 font-weight: bold;
 color: #d4af37;
@@ -105,7 +106,8 @@ margin-bottom: 10px;
 
 #login-form input,
 #logout-form input,
-#post-form input {
+#post-form input,
+#config-form input{
 padding: 10px;
 border: none;
 border-radius: 4px;
@@ -115,7 +117,8 @@ margin-bottom: 20px;
 
 #login-form button,
 #logout-form button,
-#post-form button {
+#post-form button,
+#config-form button{
 padding: 10px;
 background-color: #292535;
 color: #d4af37;
@@ -127,6 +130,7 @@ transition: background-color 0.2s ease-in-out;
 
 #login-form button:hover,
 #logout-form button:hover,
-#post-form button:hover {
+#post-form button:hover,
+#config-form button:hover{
 background-color: #6a5acd;
 }

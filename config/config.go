@@ -5,7 +5,7 @@ import (
 	"os"
 
 	"github.com/tsunagatteru/ishiki-no-nagare/model"
-	"gopkg.in/yaml.v2"
+	"gopkg.in/yaml.v3"
 )
 
 func Read(path string) *model.Config {
@@ -20,4 +20,7 @@ func Read(path string) *model.Config {
 		log.Fatalln(err)
 	}
 	return config
+}
+
+func Write(cfg model.Config) {
 }

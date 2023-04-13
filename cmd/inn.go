@@ -19,8 +19,8 @@ func main() {
 	flag.StringVar(&resourcesPath, "res", "embed", "path to resources folder, can use embedded one")
 	flag.StringVar(&dataPath, "data", "", "path to data, overwrites config")
 	flag.Parse()
-	config := config.Read(configPath)
-	config.ConfigPath = configPath
+	cfg := config.Read(configPath)
+	cfg.ConfigPath = configPath
 	var resources fs.FS
 	if resourcesPath == "embed" {
 		resources = res.GetEmbedFS()
@@ -28,14 +28,14 @@ func main() {
 		resources = os.DirFS(resourcesPath)
 	}
 	if dataPath == "" {
-		dataPath = config.DataPath
+		dataPath = cfg.DataPath
 	} else {
-		config.DataPath = dataPath
+		cfg.DataPath = dataPath
 	}
 	os.Mkdir(dataPath, 0755)
 	os.Mkdir(dataPath+"images/", 0755)
 	dbConn := db.Open(dataPath)
 	defer dbConn.Close()
 	db.CreateTable(dbConn)
-	server.RunRouter(dbConn, config, resources)
+	server.RunRouter(dbConn, cfg, resources)
 }

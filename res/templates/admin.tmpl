@@ -30,9 +30,44 @@
 	<input type="file" accept="image/*" name="files"><br><br>
   </div>
   <div>
-    <button type="submit" onclick="return submitPost()">Submit</button>
+    <button type="submit" onclick="return submitPost()">Submit Post</button>
   </div>
 </form>
+<form id="config-form">
+  <label for="username">Username:</label>
+  <input type="text" id="username" name="username"><br><br>
+
+  <label for="password">Password:</label>
+  <input type="password" id="password" name="password"><br><br>
+
+  <label for="cookiekey">Cookie Key:</label>
+  <input type="password" id="cookiekey" name="cookiekey"><br><br>
+
+  <button type="submit" onclick="return submitConfig()">Update Config</button>
+</form>
+
+<script>
+  function submitConfig() {
+      const form = document.getElementById('config-form');
+      const data = new FormData(form);
+	  
+	  const xhr = new XMLHttpRequest();
+	  xhr.onreadystatechange = function() {
+		  if (xhr.readyState === XMLHttpRequest.DONE) {
+			  if (xhr.status === 200) {
+				  alert(xhr.responseText);
+			  } else {
+				  alert('Error: ' + xhr.status);
+			  }
+		  }
+	  };
+	  xhr.open('POST', '/api/admin/config');
+	  xhr.send(data);
+	  form.reset();
+	  return false;
+	  }
+</script>
+
 <script>
 function submitPost() {
   const form = document.getElementById('post-form');
@@ -103,6 +138,7 @@ fetch('/api/admin/status')
     if (response.status === 200) {
       document.getElementById('logout-form').style.display = 'flex';
       document.getElementById('post-form').style.display = 'flex';
+      document.getElementById('config-form').style.display = 'flex';
     } else if (response.status === 401) {
       document.getElementById('login-form').style.display = 'flex';
     }

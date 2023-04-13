@@ -13,6 +13,7 @@ import (
 	"time"
 
 	"github.com/gin-gonic/gin"
+	"github.com/tsunagatteru/ishiki-no-nagare/config"
 	"github.com/tsunagatteru/ishiki-no-nagare/db"
 	"github.com/tsunagatteru/ishiki-no-nagare/model"
 )
@@ -107,14 +108,27 @@ func createPost(c *gin.Context) {
 	}
 	dataPath := c.MustGet("DataPath").(string)
 	files := form.File["files"]
-	file := files[0]
-	fileExt := filepath.Ext(file.Filename)
-	originalFileName := strings.TrimSuffix(filepath.Base(file.Filename), filepath.Ext(file.Filename))
-	filename := strings.ReplaceAll(strings.ToLower(originalFileName), " ", "-") + "-" + fmt.Sprintf("%v", time.Now().Unix()) + fileExt
-	c.SaveUploadedFile(file, dataPath+"images/"+filename)
+	var filename string
+	if len(files) != 0 {
+		file := files[0]
+		fileExt := filepath.Ext(file.Filename)
+		originalFileName := strings.TrimSuffix(filepath.Base(file.Filename), filepath.Ext(file.Filename))
+		filename = strings.ReplaceAll(strings.ToLower(originalFileName), " ", "-") + "-" + fmt.Sprintf("%v", time.Now().Unix()) + fileExt
+		c.SaveUploadedFile(file, dataPath+"images/"+filename)
+	} else {
+		filename = ""
+	}
 	db.AddPost(dbConn, message, filename)
 	c.IndentedJSON(http.StatusCreated, "created")
 }
 
 func changeConfig(c *gin.Context) {
+	var cfg model.Config
+	cfg.UserName = c.PostForm("username")
+	cfg.Password = c.PostForm("password")
+	cfg.CookieKey = c.PostForm("cookiekey")
+	cfg.ConfigPath = c.MustGet("ConfigPath").(string)
+	config.Write(cfg)
+	//Delete sessions
+	c.JSON(http.StatusOK, "Config updated")
 }
