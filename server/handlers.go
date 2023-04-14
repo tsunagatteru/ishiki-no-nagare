@@ -18,7 +18,8 @@ import (
 	"github.com/tsunagatteru/ishiki-no-nagare/model"
 )
 
-func index(c *gin.Context) {
+func showIndex(c *gin.Context) {
+
 	res, err := http.Get(c.MustGet("BaseURL").(string) + "/api/posts/1")
 	if err != nil {
 		log.Println(err)

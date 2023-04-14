@@ -42,7 +42,7 @@ func RunRouter(dbConn *sql.DB, config *model.Config, resources fs.FS) {
 	admin.POST("/config", changeConfig)
 	r.GET("/post/:id", showPost)
 	r.GET("/posts/:page", showPosts)
-	r.GET("/", index)
+	r.GET("/", showIndex)
 	r.GET("/admin", showAdminPage)
 	r.Run(config.Host + ":" + config.Port)
 }
