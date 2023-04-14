@@ -70,7 +70,7 @@
 
 .image {
 	max-width: 100%;
-	height: auto;
+	max-height: 300px;
 	margin-top: 10px;
 	margin-bottom: 10px;
 }
@@ -113,6 +113,21 @@ border: none;
 border-radius: 4px;
 box-shadow: 0 0 8px rgba(0, 0, 0, 0.2);
 margin-bottom: 20px;
+}
+
+textarea{
+	padding: 10px;
+	border: none;
+	border-radius: 4px;
+	box-shadow: 0 0 8px rgba(0, 0, 0, 0.2);
+	margin-bottom: 20px;
+	width: 300px;
+	height: 100px;
+	overflow: auto;
+	resize: both;
+	word-wrap: break-word;
+	box-sizing: border-box;
+	text-align: left;
 }
 
 #login-form button,

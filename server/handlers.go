@@ -76,26 +76,29 @@ func getPost(c *gin.Context) {
 
 func createPost(c *gin.Context) {
 	message := c.PostForm("message")
-	dbConn := c.MustGet("dbConn").(*sql.DB)
-
-	form, err := c.MultipartForm()
-	if err != nil {
-		log.Println(err)
-	}
-	dataPath := viper.Get("datapath").(string)
-	files := form.File["files"]
-	var filename string
-	if len(files) != 0 {
-		file := files[0]
-		fileExt := filepath.Ext(file.Filename)
-		originalFileName := strings.TrimSuffix(filepath.Base(file.Filename), filepath.Ext(file.Filename))
-		filename = strings.ReplaceAll(strings.ToLower(originalFileName), " ", "-") + "-" + fmt.Sprintf("%v", time.Now().Unix()) + fileExt
-		c.SaveUploadedFile(file, dataPath+"images/"+filename)
+	if message == "" {
+		c.IndentedJSON(http.StatusBadRequest, "empty message")
 	} else {
-		filename = ""
+		dbConn := c.MustGet("dbConn").(*sql.DB)
+		form, err := c.MultipartForm()
+		if err != nil {
+			log.Println(err)
+		}
+		dataPath := viper.Get("datapath").(string)
+		files := form.File["files"]
+		var filename string
+		if len(files) != 0 {
+			file := files[0]
+			fileExt := filepath.Ext(file.Filename)
+			originalFileName := strings.TrimSuffix(filepath.Base(file.Filename), filepath.Ext(file.Filename))
+			filename = strings.ReplaceAll(strings.ToLower(originalFileName), " ", "-") + "-" + fmt.Sprintf("%v", time.Now().Unix()) + fileExt
+			c.SaveUploadedFile(file, dataPath+"images/"+filename)
+		} else {
+			filename = ""
+		}
+		db.AddPost(dbConn, message, filename)
+		c.IndentedJSON(http.StatusCreated, "created")
 	}
-	db.AddPost(dbConn, message, filename)
-	c.IndentedJSON(http.StatusCreated, "created")
 }
 
 func changeConfig(c *gin.Context) {
