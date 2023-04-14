@@ -6,6 +6,7 @@ import (
 
 	"github.com/gin-contrib/sessions"
 	"github.com/gin-gonic/gin"
+	"github.com/spf13/viper"
 )
 
 const userkey = "admin"
@@ -18,7 +19,7 @@ func login(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Parameters can't be empty"})
 		return
 	}
-	if username != c.MustGet("Username") || password != c.MustGet("Password") {
+	if username != viper.Get("username").(string) || password != viper.Get("password").(string) {
 		c.JSON(http.StatusUnauthorized, gin.H{"error": "Authentication failed"})
 		return
 	}

@@ -7,14 +7,15 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"strconv"
 
 	"github.com/gin-contrib/sessions"
 	"github.com/gin-contrib/sessions/cookie"
 	"github.com/gin-gonic/gin"
-	"github.com/tsunagatteru/ishiki-no-nagare/model"
+	"github.com/spf13/viper"
 )
 
-func RunRouter(dbConn *sql.DB, config *model.Config, resources fs.FS) {
+func RunRouter(dbConn *sql.DB, resources fs.FS) {
 	r := gin.New()
 	r.SetHTMLTemplate(template.Must(template.New("").ParseFS(resources, "templates/*.tmpl")))
 	staticRoot, err := fs.Sub(resources, "static")
@@ -22,14 +23,13 @@ func RunRouter(dbConn *sql.DB, config *model.Config, resources fs.FS) {
 		log.Fatalln(err)
 	}
 	r.StaticFS("/static", http.FS(staticRoot))
-	imagesRoot, err := fs.Sub(os.DirFS(config.DataPath), "images")
+	imagesRoot, err := fs.Sub(os.DirFS(viper.Get("datapath").(string)), "images")
 	if err != nil {
 		log.Fatalln(err)
 	}
 	r.StaticFS("/images", http.FS(imagesRoot))
 	r.Use(DatabaseMiddleware(dbConn))
-	r.Use(ConfigMiddleware(config))
-	r.Use(sessions.Sessions("mysession", cookie.NewStore([]byte(config.CookieKey))))
+	r.Use(sessions.Sessions("mysession", cookie.NewStore([]byte((viper.Get("cookiekey").(string))))))
 	api := r.Group("/api")
 	api.GET("/posts/:page", getPosts)
 	api.GET("post/:id", getPost)
@@ -44,22 +44,11 @@ func RunRouter(dbConn *sql.DB, config *model.Config, resources fs.FS) {
 	r.GET("/posts/:page", showPosts)
 	r.GET("/", showIndex)
 	r.GET("/admin", showAdminPage)
-	r.Run(config.Host + ":" + config.Port)
+	r.Run((viper.Get("host").(string)) + ":" + strconv.Itoa((viper.Get("port").(int))))
 }
 
 func DatabaseMiddleware(dbConn *sql.DB) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		c.Set("dbConn", dbConn)
-	}
-}
-
-func ConfigMiddleware(config *model.Config) gin.HandlerFunc {
-	return func(c *gin.Context) {
-		c.Set("BaseURL", "http://"+config.Host+":"+config.Port)
-		c.Set("PageLength", config.PageLength)
-		c.Set("Username", config.UserName)
-		c.Set("Password", config.Password)
-		c.Set("DataPath", config.DataPath)
-		c.Set("ConfigPath", config.ConfigPath)
 	}
 }

@@ -5,6 +5,7 @@ import (
 	"log"
 
 	_ "github.com/mattn/go-sqlite3"
+	"github.com/spf13/viper"
 	"github.com/tsunagatteru/ishiki-no-nagare/model"
 )
 
@@ -35,7 +36,8 @@ func AddPost(dbConn *sql.DB, message string, filename string) {
 	}
 }
 
-func RetrievePage(dbConn *sql.DB, pageNumber int, pageLength int) []model.Post {
+func RetrievePage(dbConn *sql.DB, pageNumber int) []model.Post {
+	pageLength := viper.Get("pagelength").(int)
 	query := `SELECT id, message, filename, updated, created
     FROM Posts
     ORDER BY id DESC
