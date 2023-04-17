@@ -5,9 +5,15 @@ import (
 	"log"
 
 	_ "github.com/mattn/go-sqlite3"
-	"github.com/spf13/viper"
-	"github.com/tsunagatteru/ishiki-no-nagare/model"
 )
+
+type Post struct {
+	ID       int    `json:"id"`
+	Message  string `json:"message"`
+	FileName string `json:"filename"`
+	Edited   string `json:"edited"`
+	Created  string `json:"created"`
+}
 
 func Open(dataPath string) *sql.DB {
 	dbConn, err := sql.Open("sqlite3", dataPath+"data.db")
@@ -36,8 +42,7 @@ func AddPost(dbConn *sql.DB, message string, filename string) {
 	}
 }
 
-func RetrievePage(dbConn *sql.DB, pageNumber int) []model.Post {
-	pageLength := viper.Get("pagelength").(int)
+func RetrievePage(dbConn *sql.DB, pageNumber int, pageLength int) []Post {
 	query := `SELECT id, message, filename, updated, created
     FROM Posts
     ORDER BY id DESC
@@ -47,9 +52,9 @@ func RetrievePage(dbConn *sql.DB, pageNumber int) []model.Post {
 	if err != nil {
 		log.Println(err)
 	}
-	result := []model.Post{}
+	result := []Post{}
 	for rows.Next() {
-		row := model.Post{}
+		row := Post{}
 		if err := rows.Scan(&(row.ID), &(row.Message), &(row.FileName), &(row.Edited), &(row.Created)); err != nil {
 			log.Println(err)
 		} else {
@@ -59,7 +64,7 @@ func RetrievePage(dbConn *sql.DB, pageNumber int) []model.Post {
 	return result
 }
 
-func RetrievePost(dbConn *sql.DB, id int) model.Post {
+func RetrievePost(dbConn *sql.DB, id int) Post {
 	query := `SELECT id, message, filename, updated, created
     FROM Posts
     WHERE id=$1`
@@ -67,7 +72,7 @@ func RetrievePost(dbConn *sql.DB, id int) model.Post {
 	if err != nil {
 		log.Println(err)
 	}
-	result := model.Post{}
+	result := Post{}
 	row.Next()
 	if err := row.Scan(&(result.ID), &(result.Message), &(result.FileName), &(result.Edited), &(result.Created)); err != nil {
 		log.Println(err)

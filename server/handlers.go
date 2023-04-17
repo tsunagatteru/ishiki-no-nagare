@@ -17,7 +17,8 @@ import (
 
 func showIndex(c *gin.Context) {
 	dbConn := c.MustGet("dbConn").(*sql.DB)
-	posts := db.RetrievePage(dbConn, 1)
+	pageLength := viper.Get("pagelength").(int)
+	posts := db.RetrievePage(dbConn, 1, pageLength)
 	c.HTML(http.StatusOK, "index.tmpl", gin.H{
 		"Posts": posts,
 	})
@@ -30,7 +31,9 @@ func showPosts(c *gin.Context) {
 		log.Println(err)
 	}
 	dbConn := c.MustGet("dbConn").(*sql.DB)
-	posts := db.RetrievePage(dbConn, pageNumber)
+
+	pageLength := viper.Get("pagelength").(int)
+	posts := db.RetrievePage(dbConn, pageNumber, pageLength)
 
 	c.HTML(http.StatusOK, "posts.tmpl", gin.H{
 		"Posts": posts,
@@ -60,7 +63,8 @@ func getPosts(c *gin.Context) {
 		log.Println(err)
 	}
 	dbConn := c.MustGet("dbConn").(*sql.DB)
-	posts := db.RetrievePage(dbConn, pageNumber)
+	pageLength := viper.Get("pagelength").(int)
+	posts := db.RetrievePage(dbConn, pageNumber, pageLength)
 	c.JSON(http.StatusOK, posts)
 }
 

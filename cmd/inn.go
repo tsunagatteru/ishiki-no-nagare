@@ -8,7 +8,6 @@ import (
 
 	"github.com/fsnotify/fsnotify"
 	"github.com/spf13/viper"
-	"github.com/tsunagatteru/ishiki-no-nagare/db"
 	"github.com/tsunagatteru/ishiki-no-nagare/res"
 	"github.com/tsunagatteru/ishiki-no-nagare/server"
 )
@@ -21,6 +20,8 @@ func main() {
 	flag.StringVar(&resourcesPath, "res", "embed", "path to resources folder, can use embedded one")
 	flag.StringVar(&dataPath, "data", "/var/lib/inn/", "path to store app data")
 	flag.Parse()
+	variables := viper.New()
+	variables.Set("datapath", dataPath)
 	viper.SetConfigName("config")
 	viper.SetConfigType("yaml")
 	viper.AddConfigPath(configPath)
@@ -41,8 +42,5 @@ func main() {
 	os.Mkdir(dataPath, 0755)
 	os.Mkdir(dataPath+"images/", 0755)
 	viper.Set("datapath", dataPath)
-	dbConn := db.Open(dataPath)
-	defer dbConn.Close()
-	db.CreateTable(dbConn)
-	server.RunRouter(dbConn, resources)
+	server.Run(resources, variables)
 }
