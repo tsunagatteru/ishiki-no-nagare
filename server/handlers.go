@@ -102,10 +102,19 @@ func createPost(c *gin.Context) {
 }
 
 func changeConfig(c *gin.Context) {
-	//UserName := c.PostForm("username")
-	//Password := c.PostForm("password")
-	//CookieKey := c.PostForm("cookiekey")
-	//Write config
+	username := c.PostForm("username")
+	if username != "" {
+		viper.Set("username", username)
+	}
+	password := c.PostForm("password")
+	if password != "" {
+		viper.Set("password", password)
+	}
+	cookiekey := c.PostForm("cookiekey")
+	if cookiekey != "" {
+		viper.Set("cookiekey", cookiekey)
+	}
+	viper.WriteConfig()
 	//Delete sessions
 	c.JSON(http.StatusOK, "Config updated")
 }

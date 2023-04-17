@@ -6,6 +6,7 @@ import (
 	"io/fs"
 	"os"
 
+	"github.com/fsnotify/fsnotify"
 	"github.com/spf13/viper"
 	"github.com/tsunagatteru/ishiki-no-nagare/db"
 	"github.com/tsunagatteru/ishiki-no-nagare/res"
@@ -27,6 +28,10 @@ func main() {
 	if err != nil {
 		panic(fmt.Errorf("fatal error config file: %w", err))
 	}
+	viper.OnConfigChange(func(e fsnotify.Event) {
+		fmt.Println("Config file changed:", e.Name)
+	})
+	viper.WatchConfig()
 	var resources fs.FS
 	if resourcesPath == "embed" {
 		resources = res.GetEmbedFS()
