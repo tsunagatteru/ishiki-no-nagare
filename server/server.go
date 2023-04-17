@@ -21,6 +21,7 @@ func Run(resources fs.FS, variables *viper.Viper, config *viper.Viper) {
 	defer dbConn.Close()
 	db.CreateTable(dbConn)
 	r := gin.New()
+	r.SetTrustedProxies(nil)
 	r.SetHTMLTemplate(template.Must(template.New("").ParseFS(resources, "templates/*.tmpl")))
 	staticRoot, err := fs.Sub(resources, "static")
 	if err != nil {

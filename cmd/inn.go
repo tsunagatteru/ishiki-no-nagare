@@ -21,6 +21,7 @@ func main() {
 	flag.StringVar(&dataPath, "data", "/var/lib/inn/", "path to store app data")
 	flag.Parse()
 	variables := viper.New()
+	config := viper.New()
 	variables.Set("datapath", dataPath)
 	viper.SetConfigName("config")
 	viper.SetConfigType("yaml")
@@ -42,5 +43,5 @@ func main() {
 	os.Mkdir(dataPath, 0755)
 	os.Mkdir(dataPath+"images/", 0755)
 	viper.Set("datapath", dataPath)
-	server.Run(resources, variables)
+	server.Run(resources, variables, config)
 }
