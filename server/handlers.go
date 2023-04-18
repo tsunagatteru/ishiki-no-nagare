@@ -123,6 +123,6 @@ func changeConfig(c *gin.Context) {
 		config.Set("cookiekey", cookiekey)
 	}
 	config.WriteConfig()
-	//Delete sessions
+	logout(c)
 	c.JSON(http.StatusOK, "Config updated")
 }
