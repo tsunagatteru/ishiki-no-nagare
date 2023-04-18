@@ -17,7 +17,7 @@ import (
 )
 
 func Run(resources fs.FS, variables *viper.Viper, config *viper.Viper) {
-	dbConn := db.Open(variables.Get("datapath").(string))
+	dbConn := db.Open(variables.Get("data-path").(string))
 	defer dbConn.Close()
 	db.CreateTable(dbConn)
 	r := gin.New()
@@ -28,13 +28,13 @@ func Run(resources fs.FS, variables *viper.Viper, config *viper.Viper) {
 		log.Fatalln(err)
 	}
 	r.StaticFS("/static", http.FS(staticRoot))
-	imagesRoot, err := fs.Sub(os.DirFS(viper.Get("datapath").(string)), "images")
+	imagesRoot, err := fs.Sub(os.DirFS(variables.Get("data-path").(string)), "images")
 	if err != nil {
 		log.Fatalln(err)
 	}
 	r.StaticFS("/images", http.FS(imagesRoot))
 	r.Use(Middleware(dbConn, variables, config))
-	r.Use(sessions.Sessions("mysession", cookie.NewStore([]byte((viper.Get("cookiekey").(string))))))
+	r.Use(sessions.Sessions("mysession", cookie.NewStore([]byte((config.Get("cookiekey").(string))))))
 	api := r.Group("/api")
 	api.GET("/posts/:page", getPosts)
 	api.GET("post/:id", getPost)
@@ -49,7 +49,7 @@ func Run(resources fs.FS, variables *viper.Viper, config *viper.Viper) {
 	r.GET("/posts/:page", showPosts)
 	r.GET("/", showIndex)
 	r.GET("/admin", showAdminPage)
-	r.Run((viper.Get("host").(string)) + ":" + strconv.Itoa((viper.Get("port").(int))))
+	r.Run((config.Get("host").(string)) + ":" + strconv.Itoa((config.Get("port").(int))))
 }
 
 func Middleware(dbConn *sql.DB, variables *viper.Viper, config *viper.Viper) gin.HandlerFunc {

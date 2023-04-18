@@ -12,6 +12,7 @@ import (
 const userkey = "admin"
 
 func login(c *gin.Context) {
+	config := c.MustGet("config").(*viper.Viper)
 	session := sessions.Default(c)
 	username := c.PostForm("username")
 	password := c.PostForm("password")
@@ -19,7 +20,7 @@ func login(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Parameters can't be empty"})
 		return
 	}
-	if username != viper.Get("username").(string) || password != viper.Get("password").(string) {
+	if username != config.Get("username").(string) || password != config.Get("password").(string) {
 		c.JSON(http.StatusUnauthorized, gin.H{"error": "Authentication failed"})
 		return
 	}

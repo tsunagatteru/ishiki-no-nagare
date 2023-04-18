@@ -17,7 +17,8 @@ import (
 
 func showIndex(c *gin.Context) {
 	dbConn := c.MustGet("dbConn").(*sql.DB)
-	pageLength := viper.Get("pagelength").(int)
+	variables := c.MustGet("variables").(*viper.Viper)
+	pageLength := variables.Get("page-length").(int)
 	posts := db.RetrievePage(dbConn, 1, pageLength)
 	c.HTML(http.StatusOK, "index.tmpl", gin.H{
 		"Posts": posts,
@@ -31,8 +32,8 @@ func showPosts(c *gin.Context) {
 		log.Println(err)
 	}
 	dbConn := c.MustGet("dbConn").(*sql.DB)
-
-	pageLength := viper.Get("pagelength").(int)
+	variables := c.MustGet("variables").(*viper.Viper)
+	pageLength := variables.Get("page-length").(int)
 	posts := db.RetrievePage(dbConn, pageNumber, pageLength)
 
 	c.HTML(http.StatusOK, "posts.tmpl", gin.H{
@@ -63,7 +64,8 @@ func getPosts(c *gin.Context) {
 		log.Println(err)
 	}
 	dbConn := c.MustGet("dbConn").(*sql.DB)
-	pageLength := viper.Get("pagelength").(int)
+	variables := c.MustGet("variables").(*viper.Viper)
+	pageLength := variables.Get("page-length").(int)
 	posts := db.RetrievePage(dbConn, pageNumber, pageLength)
 	c.JSON(http.StatusOK, posts)
 }
@@ -84,11 +86,12 @@ func createPost(c *gin.Context) {
 		c.IndentedJSON(http.StatusBadRequest, "empty message")
 	} else {
 		dbConn := c.MustGet("dbConn").(*sql.DB)
+		variables := c.MustGet("variables").(*viper.Viper)
 		form, err := c.MultipartForm()
 		if err != nil {
 			log.Println(err)
 		}
-		dataPath := viper.Get("datapath").(string)
+		dataPath := variables.Get("data-path").(string)
 		files := form.File["files"]
 		var filename string
 		if len(files) != 0 {
@@ -106,19 +109,20 @@ func createPost(c *gin.Context) {
 }
 
 func changeConfig(c *gin.Context) {
+	config := c.MustGet("config").(*viper.Viper)
 	username := c.PostForm("username")
 	if username != "" {
-		viper.Set("username", username)
+		config.Set("username", username)
 	}
 	password := c.PostForm("password")
 	if password != "" {
-		viper.Set("password", password)
+		config.Set("password", password)
 	}
 	cookiekey := c.PostForm("cookiekey")
 	if cookiekey != "" {
-		viper.Set("cookiekey", cookiekey)
+		config.Set("cookiekey", cookiekey)
 	}
-	viper.WriteConfig()
+	config.WriteConfig()
 	//Delete sessions
 	c.JSON(http.StatusOK, "Config updated")
 }
