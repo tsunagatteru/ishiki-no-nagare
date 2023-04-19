@@ -4,14 +4,13 @@ import (
 	"io/fs"
 	"os"
 
-	"github.com/spf13/viper"
 	"github.com/tsunagatteru/ishiki-no-nagare/options"
 	"github.com/tsunagatteru/ishiki-no-nagare/res"
 	"github.com/tsunagatteru/ishiki-no-nagare/server"
 )
 
 func main() {
-	variables, config := options.Get()
+	variables := options.GetVar()
 	resPath := variables.Get("res-path").(string)
 	dataPath := variables.Get("data-path").(string)
 	var resources fs.FS
@@ -22,6 +21,6 @@ func main() {
 	}
 	os.Mkdir(dataPath, 0755)
 	os.Mkdir(dataPath+"images/", 0755)
-	viper.Set("datapath", dataPath)
+	config := options.GetCfg(dataPath)
 	server.Run(resources, variables, config)
 }

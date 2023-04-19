@@ -7,7 +7,6 @@ import (
 	"log"
 	"net/http"
 	"os"
-	"strconv"
 
 	"github.com/gin-contrib/sessions"
 	"github.com/gin-contrib/sessions/cookie"
@@ -49,7 +48,7 @@ func Run(resources fs.FS, variables *viper.Viper, config *viper.Viper) {
 	r.GET("/posts/:page", showPosts)
 	r.GET("/", showIndex)
 	r.GET("/admin", showAdminPage)
-	r.Run((config.Get("host").(string)) + ":" + strconv.Itoa((config.Get("port").(int))))
+	r.Run(config.GetString("host") + ":" + config.GetString("port"))
 }
 
 func Middleware(dbConn *sql.DB, variables *viper.Viper, config *viper.Viper) gin.HandlerFunc {

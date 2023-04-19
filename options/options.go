@@ -8,25 +8,34 @@ import (
 	"github.com/spf13/viper"
 )
 
-func Get() (*viper.Viper, *viper.Viper) {
-	flag.String("config-path", "/etc/inn/", "path to config")
+func GetVar() *viper.Viper {
 	flag.String("res-path", "embed", "path to resources folder, can use embedded one")
-	flag.String("data-path", "/var/lib/inn/", "path to store app data")
+	flag.String("data-path", "/app/data/", "path to store app data")
 	flag.Int("page-length", 20, "number of post fetched per page request")
 	flag.Parse()
 	variables := viper.New()
 	variables.BindPFlags(flag.CommandLine)
+	return variables
+}
+
+func GetCfg(dataPath string) *viper.Viper {
 	config := viper.New()
+	config.SetDefault("host", "127.0.0.1")
+	config.SetDefault("port", "8080")
+	config.SetDefault("username", "admin")
+	config.SetDefault("password", "password")
+	config.SetDefault("cookiekey", "secret")
 	config.SetConfigName("config")
 	config.SetConfigType("yaml")
-	config.AddConfigPath(variables.Get("config-path").(string))
+	config.AddConfigPath(dataPath)
 	err := config.ReadInConfig()
 	if err != nil {
-		panic(fmt.Errorf("fatal error config file: %w", err))
+		fmt.Println("error reading config file: %w", err)
 	}
+	config.WriteConfig()
 	config.OnConfigChange(func(e fsnotify.Event) {
 		fmt.Println("Config file changed:", e.Name)
 	})
 	config.WatchConfig()
-	return variables, config
+	return config
 }
