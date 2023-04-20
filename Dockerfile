@@ -1,4 +1,4 @@
-FROM golang:1.19.2 AS builder
+FROM golang:1.20 AS builder
 ADD . /src
 WORKDIR /src
 RUN go build -o inn cmd/inn.go
