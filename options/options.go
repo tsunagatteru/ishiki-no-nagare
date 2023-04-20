@@ -23,7 +23,7 @@ func GetCfg(dataPath string) *viper.Viper {
 	config.SetDefault("host", "127.0.0.1")
 	config.SetDefault("port", "8080")
 	config.SetDefault("username", "admin")
-	config.SetDefault("password", "password")
+	config.SetDefault("password", "admin")
 	config.SetDefault("cookiekey", "secret")
 	config.SetConfigName("config")
 	config.SetConfigType("yaml")

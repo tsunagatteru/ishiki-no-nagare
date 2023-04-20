@@ -3,19 +3,25 @@
 #+LANGUAGE: en
 #+OPTIONS: num:nil
 
-* Installation
-** Non-docker
-Requierements:
-- git
-- make
-- go >= 1.19
-#+begin_src bash
-  git clone https://github.com/tsunagatteru/ishiki-no-nagare.git
-  cd ishiki-no-nagare
-  make build
-  sudo make install
+* Installation with docker
+Install and start
+#+begin_src shell
+docker run -d --restart=always -p <YOUR_PORT>:8080 -v <YOUR_DIR OR VOLUME>:/app/data --name inn ghcr.io/tsunagatteru/ishiki-no-nagare:latest
 #+end_src
-Edit =/etc/inn/config.yml= to your liking
-#+begin_src bash
-  sudo systemctl enable --now inn.service
+Then go to localhost:{YOUR_PORT}/admin with default credentials admin/admin and change them.
+After that you can reverse-proxy service with nginx
+#+begin_src nginx
+server {
+
+    listen 80;
+
+    server_name   {YOUR DOMAIN};
+
+    location / {
+        proxy_http_version 1.0;
+        proxy_pass         http://127.0.0.1:{YOUR PORT}/;
+    }
+
+}
 #+end_src>
+
