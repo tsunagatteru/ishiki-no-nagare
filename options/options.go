@@ -2,6 +2,7 @@ package options
 
 import (
 	"fmt"
+	"log"
 
 	"github.com/fsnotify/fsnotify"
 	flag "github.com/spf13/pflag"
@@ -30,7 +31,7 @@ func GetCfg(dataPath string) *viper.Viper {
 	config.AddConfigPath(dataPath)
 	err := config.ReadInConfig()
 	if err != nil {
-		fmt.Println("error reading config file: %w", err)
+		log.Fatalln("error reading config file: %w", err)
 	}
 	config.WriteConfig()
 	config.OnConfigChange(func(e fsnotify.Event) {
