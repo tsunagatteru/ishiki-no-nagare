@@ -22,14 +22,13 @@ func main() {
 	}
 	os.Mkdir(dataPath, 0755)
 	os.Mkdir(dataPath+"images/", 0755)
-	if _, err := os.Stat("/path/to/whatever"); os.IsNotExist(err) {
+	if _, err := os.Stat(dataPath + "config.yml"); os.IsNotExist(err) {
 		file, err := os.Create(dataPath + "config.yml")
 		if err != nil {
 			log.Fatalln("Unable to create file:", err)
 		}
 		defer file.Close()
 	}
-
 	config := options.GetCfg(dataPath)
 	server.Run(resources, variables, config)
 }
