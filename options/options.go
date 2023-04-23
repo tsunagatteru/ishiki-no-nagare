@@ -21,7 +21,7 @@ func GetVar() *viper.Viper {
 
 func GetCfg(dataPath string) *viper.Viper {
 	config := viper.New()
-	config.SetDefault("host", "127.0.0.1")
+	config.SetDefault("host", "0.0.0.0")
 	config.SetDefault("port", "8080")
 	config.SetDefault("username", "admin")
 	config.SetDefault("password", "admin")
