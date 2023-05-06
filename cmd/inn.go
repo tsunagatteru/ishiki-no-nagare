@@ -12,8 +12,8 @@ import (
 
 func main() {
 	variables := options.GetVar()
-	resPath := variables.Get("res-path").(string)
-	dataPath := variables.Get("data-path").(string)
+	resPath := variables.GetString("res-path")
+	dataPath := variables.GetString("data-path")
 	var resources fs.FS
 	if resPath == "embed" {
 		resources = res.GetEmbedFS()

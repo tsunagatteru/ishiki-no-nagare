@@ -16,7 +16,7 @@ import (
 )
 
 func Run(resources fs.FS, variables *viper.Viper, config *viper.Viper) {
-	dbConn := db.Open(variables.Get("data-path").(string))
+	dbConn := db.Open(variables.GetString("data-path"))
 	defer dbConn.Close()
 	db.CreateTable(dbConn)
 	r := gin.New()
@@ -27,13 +27,13 @@ func Run(resources fs.FS, variables *viper.Viper, config *viper.Viper) {
 		log.Fatalln(err)
 	}
 	r.StaticFS("/static", http.FS(staticRoot))
-	imagesRoot, err := fs.Sub(os.DirFS(variables.Get("data-path").(string)), "images")
+	imagesRoot, err := fs.Sub(os.DirFS(variables.GetString("data-path")), "images")
 	if err != nil {
 		log.Fatalln(err)
 	}
 	r.StaticFS("/images", http.FS(imagesRoot))
 	r.Use(Middleware(dbConn, variables, config))
-	r.Use(sessions.Sessions("mysession", cookie.NewStore([]byte((config.Get("cookiekey").(string))))))
+	r.Use(sessions.Sessions("mysession", cookie.NewStore([]byte((config.GetString("cookiekey"))))))
 	api := r.Group("/api")
 	api.GET("/posts/:page", getPosts)
 	api.GET("post/:id", getPost)
