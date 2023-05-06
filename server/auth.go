@@ -20,7 +20,7 @@ func login(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Parameters can't be empty"})
 		return
 	}
-	if username != config.Get("username").(string) || password != config.Get("password").(string) {
+	if username != config.Get("username").(string) || password != config.GetString("password") {
 		c.JSON(http.StatusUnauthorized, gin.H{"error": "Authentication failed"})
 		return
 	}

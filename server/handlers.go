@@ -18,7 +18,7 @@ import (
 func showIndex(c *gin.Context) {
 	dbConn := c.MustGet("dbConn").(*sql.DB)
 	variables := c.MustGet("variables").(*viper.Viper)
-	pageLength := variables.Get("page-length").(int)
+	pageLength := variables.GetInt("page-length")
 	posts := db.RetrievePage(dbConn, 1, pageLength)
 	c.HTML(http.StatusOK, "index.tmpl", gin.H{
 		"Posts": posts,
@@ -33,9 +33,8 @@ func showPosts(c *gin.Context) {
 	}
 	dbConn := c.MustGet("dbConn").(*sql.DB)
 	variables := c.MustGet("variables").(*viper.Viper)
-	pageLength := variables.Get("page-length").(int)
+	pageLength := variables.GetInt("page-length")
 	posts := db.RetrievePage(dbConn, pageNumber, pageLength)
-
 	c.HTML(http.StatusOK, "posts.tmpl", gin.H{
 		"Posts": posts,
 	})
@@ -65,7 +64,7 @@ func getPosts(c *gin.Context) {
 	}
 	dbConn := c.MustGet("dbConn").(*sql.DB)
 	variables := c.MustGet("variables").(*viper.Viper)
-	pageLength := variables.Get("page-length").(int)
+	pageLength := variables.GetInt("page-length")
 	posts := db.RetrievePage(dbConn, pageNumber, pageLength)
 	c.JSON(http.StatusOK, posts)
 }
@@ -91,7 +90,7 @@ func createPost(c *gin.Context) {
 		if err != nil {
 			log.Println(err)
 		}
-		dataPath := variables.Get("data-path").(string)
+		dataPath := variables.GetString("data-path")
 		files := form.File["files"]
 		var filename string
 		if len(files) != 0 {
